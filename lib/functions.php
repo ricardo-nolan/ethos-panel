@@ -155,25 +155,7 @@ class functions
 	{
 		$tstats = array();
 		$this->getuser($_SESSION['uid']);
-
 		$this->stats = $this->makerequest($this->user->url, "", 1);
-		foreach($this->stats['rigs'] as $rig => $data)
-		{
-			$sql = "INSERT INTO hash (userid,date, rig, hash) "
-					. "values("
-					. "'" . $this->user->id . "',"
-					. "'" . date('d-m-Y H:i') . "',"
-					. "'" . $rig . "','" . $data['hash'] . "') "
-					. "ON DUPLICATE KEY UPDATE "
-					. "userid='" . $this->user->id . "', "
-					. "date='" . date('d-m-Y H:i') . "', "
-					. "rig='" . $rig . "', "
-					. "hash='" . $data['hash'] . "'";
-			if($this->db->query($sql) !== TRUE)
-			{
-				echo "Error: " . $sql . "<br>" . $this->db->error;
-			}
-		}
 	}
 
 	public function getstats()
