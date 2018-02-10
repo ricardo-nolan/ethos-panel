@@ -121,6 +121,20 @@ class functions
 		unset($_SESSION['uid']);
 		session_destroy();
 	}
+	
+	public function saveprofile($url)
+	{
+		$sql = "UPDATE users set url=? where id=?";
+				if($stmt = $this->db->prepare($sql))
+				{
+					$stmt->bind_param("si", $url, $this->user->id);
+					$stmt->execute();
+				}
+				else
+				{
+					return false;
+				}
+	}
 
 	public function getstats()
 	{

@@ -27,6 +27,9 @@
 session_start();
 include('lib/functions.php');
 $f=new functions();
+if(!empty($_POST['url'])){
+	$f->saveprofile($_POST['url']);
+}
 $f->getuser($_SESSION['uid']);
 $contentdata["email"]=$f->user->email;
 $contentdata["url"]=$f->user->url;
