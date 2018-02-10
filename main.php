@@ -30,7 +30,7 @@ if(isset($_GET['logout'])){
 	$f->logout();
 	header('location: /');
 }
-
+$f->getuserstats();
 $table="";
 foreach($f->stats['rigs'] as $key=>$value){
 	$value['miner_hashes']=implode(" ",array_map('round',explode(" ",$value['miner_hashes'])));
