@@ -62,8 +62,9 @@ class functions
 			return;
 		}
 	}
-	
-	public function getuser($uid){
+
+	public function getuser($uid)
+	{
 		$sql = "SELECT id,email,url from users where id = ?";
 		if($stmt = $this->db->prepare($sql))
 		{
@@ -73,7 +74,7 @@ class functions
 			if($result->num_rows > 0)
 			{
 				$user = $result->fetch_object();
-				$this->user=$user;
+				$this->user = $user;
 			}
 		}
 	}
@@ -115,25 +116,25 @@ class functions
 			}
 		}
 	}
-	
+
 	public function logout()
 	{
 		unset($_SESSION['uid']);
 		session_destroy();
 	}
-	
+
 	public function saveprofile($url)
 	{
 		$sql = "UPDATE users set url=? where id=?";
-				if($stmt = $this->db->prepare($sql))
-				{
-					$stmt->bind_param("si", $url, $this->user->id);
-					$stmt->execute();
-				}
-				else
-				{
-					return false;
-				}
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->bind_param("si", $url, $_SESSION['uid']);
+			$stmt->execute();
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public function getstats()
@@ -183,10 +184,10 @@ class functions
 		}
 	}
 
-	function getcontent($file, $data=null)
+	function getcontent($file, $data = null)
 	{
 		$template = file_get_contents($file);
-		if($data!=null)
+		if($data != null)
 		{
 			foreach($data as $key => $value)
 			{
