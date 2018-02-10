@@ -26,7 +26,7 @@
 session_start();
 
 include('lib/functions.php');
-$f=new functions($home_dir);
+$f=new functions();
 
 if(!empty($_POST['email']) && !empty($_POST['password'])){
 	$f->login($_POST['email'],$_POST['password']);

@@ -176,10 +176,12 @@ class functions
 	function getcontent($file, $data=null)
 	{
 		$template = file_get_contents($file);
-
-		foreach($data as $key => $value)
+		if($data!=null)
 		{
-			$template = str_replace('<!--%%' . $key . '%%-->', $value, $template);
+			foreach($data as $key => $value)
+			{
+				$template = str_replace('<!--%%' . $key . '%%-->', $value, $template);
+			}
 		}
 
 		return $template;
