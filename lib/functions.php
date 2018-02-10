@@ -161,11 +161,11 @@ class functions
 			{
 				$sql = "INSERT INTO hash (userid,date, rig, hash) "
 						. "values("
-						. "'" . $this->user->id . "',"
+						. "'" . $user->id . "',"
 						. "'" . date('d-m-Y H:i') . "',"
 						. "'" . $rig . "','" . $data['hash'] . "') "
 						. "ON DUPLICATE KEY UPDATE "
-						. "userid='" . $this->user->id . "', "
+						. "userid='" . $user->id . "', "
 						. "date='" . date('d-m-Y H:i') . "', "
 						. "rig='" . $rig . "', "
 						. "hash='" . $data['hash'] . "'";
