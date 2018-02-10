@@ -34,4 +34,4 @@ if(!empty($_POST['email']) && !empty($_POST['password'])){
 if(isset($_SESSION['uid']) && !empty($_SESSION['uid'])){
 	header('location: main.php');
 }
-echo $f->getcontent('./templates/index.html',$contentdata);
+echo $f->getcontent('./templates/index.html');
