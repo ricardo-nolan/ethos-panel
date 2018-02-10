@@ -167,10 +167,6 @@ class functions
 			}
 			return json_encode($stats);
 		}
-		else
-		{
-			echo "0 results";
-		}
 	}
 
 	function getcontent($file, $data=null)

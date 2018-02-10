@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 165.227.119.49 (MySQL 5.7.21-0ubuntu0.16.04.1)
+# Host: localhost (MySQL 5.6.38)
 # Database: ethos-panel
-# Generation Time: 2018-02-10 21:07:54 +0000
+# Generation Time: 2018-02-10 21:16:25 +0000
 # ************************************************************
 
 
@@ -46,12 +46,21 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(55) NOT NULL,
   `password` varchar(100) NOT NULL DEFAULT '',
-  `url` varchar(55) NOT NULL,
-  `resethash` varchar(255) DEFAULT NULL,
+  `url` varchar(55) DEFAULT '',
+  `resethash` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+
+INSERT INTO `users` (`id`, `email`, `password`, `url`, `resethash`)
+VALUES
+	(1,'ricardo.a.nolan@gmail.com','$2y$10$migS9ZJLFOi8k27bSt/k/uwUNuGwNdfPh.IDKHwx.toZqtrJOWT.q','','');
+
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 
