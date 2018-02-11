@@ -190,28 +190,35 @@ class functions
 
 	public function getchart()
 	{
-		$sql = "SELECT * from hash";
-		$result = $this->db->query($sql);
-		if($result->num_rows > 0)
+		$this->getuser($_SESSION['uid']);
+		$sql = "SELECT * from hash where userid = ?";
+		if($stmt = $this->db->prepare($sql))
 		{
-			$stats = array();
-			$counter = -1;
-			$tdate = "";
-			while($row = $result->fetch_object())
+			$stmt->bind_param("s", $this->user->id);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if($result->num_rows > 0)
 			{
-				if($tdate != $row->date)
+
+				$stats = array();
+				$counter = -1;
+				$tdate = "";
+				while($row = $result->fetch_object())
 				{
-					$counter++;
-					$tdate = $row->date;
+					if($tdate != $row->date)
+					{
+						$counter++;
+						$tdate = $row->date;
+					}
+					$stats[$counter]['date'] = $row->date;
+					$stats[$counter][$row->rig] = $row->hash;
 				}
-				$stats[$counter]['date'] = $row->date;
-				$stats[$counter][$row->rig] = $row->hash;
+				return json_encode($stats);
 			}
-			return json_encode($stats);
 		}
 	}
 
-	function getcontent($file, $data = null)
+	public function getcontent($file, $data = null)
 	{
 		$template = file_get_contents($file);
 		if($data != null)
@@ -225,7 +232,8 @@ class functions
 		return $template;
 	}
 
-	public function makerequest($url, $data = "", $json = false)
+	public
+			function makerequest($url, $data = "", $json = false)
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
