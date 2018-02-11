@@ -164,22 +164,25 @@ class functions
 		$result = $this->getusers();
 		while($user = $result->fetch_object())
 		{
-			$this->stats = $this->makerequest($user->url, "", 1);
-			foreach($this->stats['rigs'] as $rig => $data)
+			if(!empty($user->url))
 			{
-				$sql = "INSERT INTO hash (userid,date, rig, hash) "
-						. "values("
-						. "'" . $user->id . "',"
-						. "'" . date('d-m-Y H:i') . "',"
-						. "'" . $rig . "','" . $data['hash'] . "') "
-						. "ON DUPLICATE KEY UPDATE "
-						. "userid='" . $user->id . "', "
-						. "date='" . date('d-m-Y H:i') . "', "
-						. "rig='" . $rig . "', "
-						. "hash='" . $data['hash'] . "'";
-				if($this->db->query($sql) !== TRUE)
+				$this->stats = $this->makerequest($user->url, "", 1);
+				foreach($this->stats['rigs'] as $rig => $data)
 				{
-					echo "Error: " . $sql . "<br>" . $this->db->error;
+					$sql = "INSERT INTO hash (userid,date, rig, hash) "
+							. "values("
+							. "'" . $user->id . "',"
+							. "'" . date('d-m-Y H:i') . "',"
+							. "'" . $rig . "','" . $data['hash'] . "') "
+							. "ON DUPLICATE KEY UPDATE "
+							. "userid='" . $user->id . "', "
+							. "date='" . date('d-m-Y H:i') . "', "
+							. "rig='" . $rig . "', "
+							. "hash='" . $data['hash'] . "'";
+					if($this->db->query($sql) !== TRUE)
+					{
+						echo "Error: " . $sql . "<br>" . $this->db->error;
+					}
 				}
 			}
 		}
