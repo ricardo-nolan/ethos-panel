@@ -185,6 +185,7 @@ THE SOFTWARE.
 
 				var graph = Morris.Line({
 					element: 'morris-area-chart',
+					data: <!--%%data%%-->,
 					xkey: 'date',
 					ykeys: [<!--%%keys%%-->],
 					labels: [<!--%%keys%%-->],
@@ -204,7 +205,7 @@ THE SOFTWARE.
 				loaddata(); // This will run on page load
 				setInterval(function () {
 					loaddata() // this will run after every 5 seconds
-				}, 30000);
+				}, 5000);
 			});
 		</script>
 		<!-- Custom Theme JavaScript -->
