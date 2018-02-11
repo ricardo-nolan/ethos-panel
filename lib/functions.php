@@ -136,6 +136,21 @@ class functions
 		unset($_SESSION['uid']);
 		session_destroy();
 	}
+	
+	public function changepassword($password)
+	{
+		$sql = "UPDATE users set password=? where id=?";
+		if($stmt = $this->db->prepare($sql))
+		{
+			$hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+			$stmt->bind_param("si", $hashedpassword, $_SESSION['uid']);
+			$stmt->execute();
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	public function saveprofile($url)
 	{
