@@ -183,18 +183,28 @@ THE SOFTWARE.
 		<script>
 			$(function () {
 
-				Morris.Line({
+				var graph = Morris.Line({
 					element: 'morris-area-chart',
-					data:<!--%%data%%-->,
 					xkey: 'date',
 					ykeys: [<!--%%keys%%-->],
 					labels: [<!--%%keys%%-->],
-					behaveLikeLine:true,
+					behaveLikeLine: true,
 					pointSize: 1,
 					hideHover: 'auto',
 					resize: true,
 					smooth: false
 				});
+				function loaddata() {
+					$.get("data.php", function (data) {
+						graph.setData(data);
+						graph.redraw();
+					});
+				}
+
+				loaddata(); // This will run on page load
+				setInterval(function () {
+					loaddata() // this will run after every 5 seconds
+				}, 30000);
 			});
 		</script>
 		<!-- Custom Theme JavaScript -->

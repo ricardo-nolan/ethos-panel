@@ -205,7 +205,6 @@ class functions
 
 	public function getchart()
 	{
-		$this->getuser($_SESSION['uid']);
 		$sql = "SELECT * from hash where userid = ?";
 		if($stmt = $this->db->prepare($sql))
 		{

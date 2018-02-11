@@ -27,6 +27,7 @@
 session_start();
 include('lib/functions.php');
 $f = new functions();
+$f->getuser($_SESSION['uid']);
 if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['password'] == $_POST['confirmpassword'])
 {
 	$f->changepassword($_POST['password']);
@@ -35,7 +36,6 @@ if(!empty($_POST['url']))
 {
 	$f->saveprofile($_POST['url']);
 }
-$f->getuser($_SESSION['uid']);
 $contentdata["email"] = $f->user->email;
 $contentdata["url"] = $f->user->url;
 echo $f->getcontent('./templates/profile.html', $contentdata);

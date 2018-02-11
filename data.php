@@ -3,7 +3,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2018 foraern.
+ * Copyright 2018 ricardonolan.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,35 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 session_start();
 include('lib/functions.php');
 $f=new functions();
 $f->getuser($_SESSION['uid']);
-if(isset($_GET['logout'])){
-	$f->logout();
-	header('location: /');
-}
-$f->getuserstats();
-$table="";
-foreach($f->stats['rigs'] as $key=>$value){
-	$value['miner_hashes']=implode(" ",array_map('round',explode(" ",$value['miner_hashes'])));
-	$value['temp']=implode(" ",array_map('round',explode(" ",$value['temp'])));
-	$value['fanrpm']=implode(" ",array_map(function($input) { return round($input / 1000); },explode(" ",$value['fanrpm'])));
-	$table.="<tr>"
-			. "<td>{$key} / {$value['rack_loc']}</td>"
-			. "<td>{$value['ip']}</td>"
-			. "<td>{$value['miner_instance']} / {$value['gpus']}</td>"
-			. "<td>{$value['hash']}</td>"
-			. "<td>{$value['miner_hashes']}</td>"
-			. "<td>{$value['temp']}</td>"
-			. "<td>{$value['fanrpm']}</td>"
-			. "</tr>";
-	$keys[] = "'" . $key . "'";
-}
-$contentdata["table"]=$table;
-$contentdata["data"]=$f->getchart();
-$contentdata["keys"]=implode(",",$keys);
-echo $f->getcontent('./templates/main.html',$contentdata);
-
-
-
+echo $f->getchart();
