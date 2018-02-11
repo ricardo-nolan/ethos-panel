@@ -210,7 +210,7 @@ class functions
 						$counter++;
 						$tdate = $row->date;
 					}
-					$stats[$counter]['date'] = $row->date;
+					$stats[$counter]['date'] = date('Y-m-d H:i',strtotime($row->date));
 					$stats[$counter][$row->rig] = $row->hash;
 				}
 				return json_encode($stats);
