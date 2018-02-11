@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /*
  * The MIT License
  *
@@ -30,7 +29,11 @@ include('utilities/autofan.php');
 include('utilities/rigcheck.php');
 $f = new functions();
 $f->getstats();
-
-$a = new autofan();
-
-$r = new rigcheck();
+if($f->config->autofan == 1)
+{
+	$a = new autofan();
+}
+if($f->config->rigcheck == 1)
+{
+	$r = new rigcheck();
+}

@@ -1,4 +1,6 @@
 {
+	"autofan": 1,
+	"rigcheck": 1,
 	"db_servername": "localhost",
 	"db_username": "",
 	"db_password": "",
