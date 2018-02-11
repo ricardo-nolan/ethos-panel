@@ -55,9 +55,6 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 
-INSERT INTO `users` (`id`, `email`, `password`, `url`, `resethash`)
-VALUES
-	(1,'ricardo.a.nolan@gmail.com','$2y$10$migS9ZJLFOi8k27bSt/k/uwUNuGwNdfPh.IDKHwx.toZqtrJOWT.q','','');
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
