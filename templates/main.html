@@ -181,7 +181,7 @@ THE SOFTWARE.
 		<script src="/assets/vendor/raphael/raphael.min.js"></script>
 		<script src="/assets/vendor/morrisjs/morris.min.js"></script>
 		<script>
-
+			$(function () {
 
 				var graph = Morris.Line({
 					element: 'morris-area-chart',
@@ -206,7 +206,7 @@ THE SOFTWARE.
 				setInterval(function () {
 					loaddata() // this will run after every 5 seconds
 				}, 30000);
-
+			});
 		</script>
 		<!-- Custom Theme JavaScript -->
 		<script src="/assets/dist/js/sb-admin-2.js"></script>
