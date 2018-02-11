@@ -196,7 +196,7 @@ THE SOFTWARE.
 					smooth: false
 				});
 				function loaddata() {
-					$.get("data.php", function (data) {
+					$.getJSON("data.php", function (data) {
 						graph.setData(data);
 						graph.redraw();
 					});
