@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2018 foraern.
@@ -26,11 +26,16 @@
 
 session_start();
 include('lib/functions.php');
-$f=new functions();
-if(!empty($_POST['url'])){
+$f = new functions();
+if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['password'] == $_POST['confirmpassword'])
+{
+	$f->changepassword($_POST['password']);
+}
+if(!empty($_POST['url']))
+{
 	$f->saveprofile($_POST['url']);
 }
 $f->getuser($_SESSION['uid']);
-$contentdata["email"]=$f->user->email;
-$contentdata["url"]=$f->user->url;
-echo $f->getcontent('./templates/profile.html',$contentdata);
+$contentdata["email"] = $f->user->email;
+$contentdata["url"] = $f->user->url;
+echo $f->getcontent('./templates/profile.html', $contentdata);
