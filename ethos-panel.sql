@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: localhost (MySQL 5.6.38)
+# Host: 127.0.0.1 (MySQL 5.6.38)
 # Database: ethos-panel
-# Generation Time: 2018-02-10 21:16:25 +0000
+# Generation Time: 2018-02-15 11:40:56 +0000
 # ************************************************************
 
 
@@ -37,6 +37,21 @@ CREATE TABLE `hash` (
 
 
 
+# Dump of table remoteconf
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `remoteconf`;
+
+CREATE TABLE `remoteconf` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `conf` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userid` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table users
 # ------------------------------------------------------------
 
@@ -47,17 +62,12 @@ CREATE TABLE `users` (
   `email` varchar(55) NOT NULL,
   `password` varchar(100) NOT NULL DEFAULT '',
   `url` varchar(55) DEFAULT '',
-  `resethash` varchar(255) DEFAULT '',
+  `usercode` varchar(6) DEFAULT '',
+  `resethash` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-
-
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 

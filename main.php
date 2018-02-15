@@ -26,11 +26,10 @@
 session_start();
 include('lib/functions.php');
 $f=new functions();
-$f->getuser($_SESSION['uid']);
-if(isset($_GET['logout'])){
-	$f->logout();
+if(!isset($_SESSION['uid'])){
 	header('location: /');
 }
+$f->getuser($_SESSION['uid']);
 $f->getuserstats();
 $table="";
 foreach($f->stats['rigs'] as $key=>$value){

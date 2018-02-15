@@ -1,0 +1,15 @@
+********************************************
+********* SAMPLE DATA - DO NOT USE *********
+********************************************
+
+maxgputemp 85
+stratumproxy enabled
+proxywallet 0x0bdC4F12fB57d3acA9C3cF72B7AA2789A20d27f2
+proxypool1 pool-usa.ethosdistro.com:5001
+proxypool2 pool-eu.ethosdistro.com:5001
+flags --cl-global-work 8192 --farm-recheck 200
+globalfan 85
+
+********************************************
+********* SAMPLE DATA - DO NOT USE *********
+********************************************

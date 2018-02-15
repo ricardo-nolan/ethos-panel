@@ -27,6 +27,9 @@
 session_start();
 include('lib/functions.php');
 $f = new functions();
+if(!isset($_SESSION['uid'])){
+	header('location: /');
+}
 $f->getuser($_SESSION['uid']);
 if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['password'] == $_POST['confirmpassword'])
 {
@@ -34,7 +37,9 @@ if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['pa
 }
 if(!empty($_POST['url']))
 {
-	$f->saveprofile($_POST['url']);
+	if (filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE) {
+		$f->saveprofile($_POST['url']);
+	}
 }
 $contentdata["email"] = $f->user->email;
 $contentdata["url"] = $f->user->url;

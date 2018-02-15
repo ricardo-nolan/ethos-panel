@@ -65,7 +65,7 @@ class functions
 
 	public function getuser($uid)
 	{
-		$sql = "SELECT id,email,url from users where id = ?";
+		$sql = "SELECT id,email,url,usercode from users where id = ?";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->bind_param("i", $uid);
@@ -136,7 +136,7 @@ class functions
 		unset($_SESSION['uid']);
 		session_destroy();
 	}
-	
+
 	public function changepassword($password)
 	{
 		$sql = "UPDATE users set password=? where id=?";
@@ -154,10 +154,12 @@ class functions
 
 	public function saveprofile($url)
 	{
-		$sql = "UPDATE users set url=? where id=?";
+		$sql = "UPDATE users set url=?, usercode=? where id=?";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bind_param("si", $url, $_SESSION['uid']);
+			$regex = '/http:\/\/([a-z0-9]{6}).*/';
+			preg_match($re, $str, $usercode);
+			$stmt->bind_param("ssi", $url, $usercode[1], $_SESSION['uid']);
 			$stmt->execute();
 		}
 		else
@@ -187,7 +189,7 @@ class functions
 					$sql = "INSERT INTO hash (userid,date, rig, hash) "
 							. "values("
 							. "'" . $user->id . "',"
-							. "'" . date('d-m-Y H:i') . "',"
+							. "'" . date('Y-m-d H:i:00') . "',"
 							. "'" . $rig . "','" . $data['hash'] . "') "
 							. "ON DUPLICATE KEY UPDATE "
 							. "userid='" . $user->id . "', "
@@ -200,6 +202,11 @@ class functions
 					}
 				}
 			}
+		}
+		$sql = "DELETE hash WHERE DATE(date) < DATE(NOW() - INTERVAL 7 DAY)";
+		if($this->db->query($sql) !== TRUE)
+		{
+			echo "Error: " . $sql . "<br>" . $this->db->error;
 		}
 	}
 
@@ -224,7 +231,7 @@ class functions
 						$counter++;
 						$tdate = $row->date;
 					}
-					$stats[$counter]['date'] = date('Y-m-d H:i',strtotime($row->date));
+					$stats[$counter]['date'] = date('Y-m-d H:i', strtotime($row->date));
 					$stats[$counter][$row->rig] = $row->hash;
 				}
 				return json_encode($stats);
@@ -244,6 +251,42 @@ class functions
 		}
 
 		return $template;
+	}
+
+	public function getremoteconf($usercode)
+	{
+		$sql = "SELECT conf from remoteconf join users on remoteconf.userid=users.id where users.usercode=?";
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->bind_param("s", $usercode);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if($result->num_rows == 1)
+			{
+				$row = $result->fetch_object();
+				return $row->conf;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	public function saveremoteconf($conf)
+	{
+
+		$sql = "INSERT into remoteconf (userid,conf) values(?,?) "
+				. "ON DUPLICATE KEY UPDATE conf=?";
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->bind_param("iss", $this->user->id, $conf, $conf);
+			$stmt->execute();
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public

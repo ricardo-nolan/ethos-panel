@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2018 foraern.
@@ -23,18 +23,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-session_start();
 
+session_start();
 include('lib/functions.php');
-$f=new functions();
-if(isset($_GET['logout'])){
-	$f->logout();
-	header('location: /');
+$f = new functions();
+
+if(isset($_GET['usercode']))
+{
+	echo str_replace("\n","<br />",$f->getremoteconf($_GET['usercode']));
 }
-if(!empty($_POST['email']) && !empty($_POST['password'])){
-	$f->login($_POST['email'],$_POST['password']);
+else
+{
+	if(!isset($_SESSION['uid']))
+	{
+		header('location: /');
+	}
+	$f->getuser($_SESSION['uid']);
+	if(!empty($_POST['remoteconf']))
+	{
+		$f->saveremoteconf($_POST['remoteconf']);
+	}
+	$contentdata['value'] = $f->getremoteconf($f->user->usercode);
+	if(empty($contentdata['value'])){
+		$contentdata['value'] = file_get_contents('./sampleconf');
+	}
+	if(empty($f->user->usercode))
+	{
+		$contentdata['remoteurl'] = "Please configure your url in the profile section";
+	}
+	else
+	{
+		$contentdata['remoteurl'] = "<a href='http://".$_SERVER['SERVER_NAME']."/remote/".$f->user->usercode."' target='_blank'>http://".$_SERVER['SERVER_NAME']."/remote/".$f->user->usercode."</a>";
+	}
+	echo $f->getcontent('./templates/remoteconf.html', $contentdata);
 }
-if(isset($_SESSION['uid']) && !empty($_SESSION['uid'])){
-	header('location: main.php');
-}
-echo $f->getcontent('./templates/index.html');
+
+
