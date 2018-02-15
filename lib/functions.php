@@ -203,7 +203,7 @@ class functions
 				}
 			}
 		}
-		$sql = "DELETE hash WHERE DATE(date) < DATE(NOW() - INTERVAL 7 DAY)";
+		$sql = "DELETE from hash WHERE DATE(date) < DATE(NOW() - INTERVAL 7 DAY)";
 		if($this->db->query($sql) !== TRUE)
 		{
 			echo "Error: " . $sql . "<br>" . $this->db->error;
