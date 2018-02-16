@@ -50,6 +50,7 @@ foreach($f->stats['rigs'] as $key=>$value){
 $contentdata["table"]=$table;
 $contentdata["data"]=$f->getchart();
 $contentdata["keys"]=implode(",",$keys);
+$contentdate["news"]=$f->getnews();
 echo $f->getcontent('./templates/main.html',$contentdata);
 
 

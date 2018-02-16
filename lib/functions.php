@@ -253,6 +253,30 @@ class functions
 
 		return $template;
 	}
+	
+	public function getnews()
+	{
+		$sql = "SELECT * from news limit 0,10 order by date desc";
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if($result->num_rows > 1)
+			{
+				$news="";
+				while($row = $result->fetch_object())
+				{
+					$date=explode(" ",$row->date);
+					$news.="<li>[".$date[0]."] ".$row->content."</li>";
+				}
+				return $news;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
 
 	public function getremoteconf($usercode)
 	{
