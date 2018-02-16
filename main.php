@@ -32,24 +32,27 @@ if(!isset($_SESSION['uid'])){
 $f->getuser($_SESSION['uid']);
 $f->getuserstats();
 $table="";
-foreach($f->stats['rigs'] as $key=>$value){
-	$value['miner_hashes']=implode(" ",array_map('round',explode(" ",$value['miner_hashes'])));
-	$value['temp']=implode(" ",array_map('round',explode(" ",$value['temp'])));
-	$value['fanrpm']=implode(" ",array_map(function($input) { return round($input / 1000); },explode(" ",$value['fanrpm'])));
-	$table.="<tr>"
-			. "<td>{$key} / {$value['rack_loc']}</td>"
-			. "<td>{$value['ip']}</td>"
-			. "<td>{$value['miner_instance']} / {$value['gpus']}</td>"
-			. "<td>{$value['hash']}</td>"
-			. "<td>{$value['miner_hashes']}</td>"
-			. "<td>{$value['temp']}</td>"
-			. "<td>{$value['fanrpm']}</td>"
-			. "</tr>";
-	$keys[] = "'" . $key . "'";
+if(!empty($f->stats['rigs']))
+{
+	foreach($f->stats['rigs'] as $key=>$value){
+		$value['miner_hashes']=implode(" ",array_map('round',explode(" ",$value['miner_hashes'])));
+		$value['temp']=implode(" ",array_map('round',explode(" ",$value['temp'])));
+		$value['fanrpm']=implode(" ",array_map(function($input) { return round($input / 1000); },explode(" ",$value['fanrpm'])));
+		$table.="<tr>"
+				. "<td>{$key} / {$value['rack_loc']}</td>"
+				. "<td>{$value['ip']}</td>"
+				. "<td>{$value['miner_instance']} / {$value['gpus']}</td>"
+				. "<td>{$value['hash']}</td>"
+				. "<td>{$value['miner_hashes']}</td>"
+				. "<td>{$value['temp']}</td>"
+				. "<td>{$value['fanrpm']}</td>"
+				. "</tr>";
+		$keys[] = "'" . $key . "'";
+	}
+	$contentdata["table"]=$table;
+	$contentdata["keys"]=implode(",",$keys);
 }
-$contentdata["table"]=$table;
 $contentdata["data"]=$f->getchart();
-$contentdata["keys"]=implode(",",$keys);
 $contentdata["news"]=$f->getnews();
 echo $f->getcontent('./templates/main.html',$contentdata);
 

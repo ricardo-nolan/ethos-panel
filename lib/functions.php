@@ -256,7 +256,7 @@ class functions
 	
 	public function getnews()
 	{
-		$sql = "SELECT * from news limit 0,10 order by date desc";
+		$sql = "SELECT * from news order by date desc limit 0,10";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
