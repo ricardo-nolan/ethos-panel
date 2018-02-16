@@ -35,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	}';
 	if(!file_put_contents('../config/config.json', $config))
 	{
-		die("Error writing config file");
+		die("Error writing config file <br /> <h3>Please run 'sudo chown -R www-data:www-data /var/www/html'</h3>");
 	}
 	// Create connection
 	$conn = new mysqli($_POST['db_servername'], $_POST['db_username'], $_POST['db_password']);
