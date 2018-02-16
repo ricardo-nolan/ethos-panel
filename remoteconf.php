@@ -57,6 +57,7 @@ else
 		}
 		$contentdata['remoteurl'] = "<a href='http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->usercode . "' target='_blank'>http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->usercode . "</a>";
 	}
+	$contentdata["news"]=$f->getnews();
 	echo $f->getcontent('./templates/remoteconf.html', $contentdata);
 }
 
