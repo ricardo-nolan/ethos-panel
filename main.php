@@ -27,7 +27,7 @@ session_start();
 include('lib/functions.php');
 $f=new functions();
 if(!isset($_SESSION['uid'])){
-	header('location: /');
+//	header('location: /');
 }
 $f->getuser($_SESSION['uid']);
 $f->getuserstats();
