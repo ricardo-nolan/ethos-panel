@@ -39,6 +39,7 @@ if(!empty($_POST['url']))
 {
 	if (filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE) {
 		$f->saveprofile($_POST['url']);
+		$f->getuser($_SESSION['uid']);
 	}
 }
 $contentdata["email"] = $f->user->email;

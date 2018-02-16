@@ -110,6 +110,7 @@ class functions
 				}
 				else
 				{
+					echo "failed login";
 					return false;
 				}
 			}
@@ -158,7 +159,7 @@ class functions
 		if($stmt = $this->db->prepare($sql))
 		{
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
-			preg_match($re, $str, $usercode);
+			preg_match($regex, $url, $usercode);
 			$stmt->bind_param("ssi", $url, $usercode[1], $_SESSION['uid']);
 			$stmt->execute();
 		}
