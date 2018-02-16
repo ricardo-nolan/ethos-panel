@@ -26,11 +26,11 @@
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	$config = '{
-	"autofan": 0,\n
-	"rigcheck": 0,\n
-	"db_servername": "' . $_POST['db_servername'] . '",\n
-	"db_username": "' . $_POST['db_username'] . '",\n
-	"db_password": "' . $_POST['db_password'] . '",\n
+	"autofan": 0,
+	"rigcheck": 0,
+	"db_servername": "' . $_POST['db_servername'] . '",
+	"db_username": "' . $_POST['db_username'] . '",
+	"db_password": "' . $_POST['db_password'] . '",
 	"db_name": "' . $_POST['db_name'] . '"
 	}';
 	if(!file_put_contents('../config/config.json', $config))
