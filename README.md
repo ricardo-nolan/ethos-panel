@@ -13,10 +13,13 @@ To setup on your own server, simply copy/clone the files to your webserver, impo
 You can also use the installation script as follows:
 Log into your server via ssh, and run:
 
-chown -R www-data:www-data /var/www/html
-cd /var/www/html
-git clone https://github.com/foraern/ethos-panel.git
-then point your browser to: http://yourserver/install/install.php and fill in with appropriate info.
+`chown -R www-data:www-data /var/www/html`
+
+`cd /var/www/html`
+
+`git clone https://github.com/foraern/ethos-panel.git`
+
+then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
 
 
 # WORK IN PROGRESS
