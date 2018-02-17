@@ -14,11 +14,9 @@ You can also use the installation script as follows:
 Log into your server via ssh, and run:
 (assuming /var/www/html is empty)
 
-`chown -R www-data:www-data /var/www/html`
-
-`cd /var/www/html`
-
-`git clone https://github.com/foraern/ethos-panel.git`
+    chown -R www-data:www-data /var/www/html
+    cd /var/www/html
+    git clone https://github.com/foraern/ethos-panel.git
 
 then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
 
@@ -28,17 +26,17 @@ then point your browser to: `http://yourserver/install/install.php` and fill in 
 Below are the correct steps for installing.
 (assuming /var/www/html is empty)
 
-    `cd /var/www/html`
-    `sudo chown -R www-data:www-data /var/www/html`
-    `sudo a2enmod rewrite`
-    `sudo service apache2 restart`
-    `git clone https://github.com/foraern/ethos-panel.git .`
+    cd /var/www/html
+    sudo chown -R www-data:www-data /var/www/html
+    sudo a2enmod rewrite
+    sudo service apache2 restart
+    git clone https://github.com/foraern/ethos-panel.git .
 
 then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
 
 You can get your mysql password with the following:
 
-    `tail /root/.digitalocean_password`
+    tail /root/.digitalocean_password
 
 
 # WORK IN PROGRESS
