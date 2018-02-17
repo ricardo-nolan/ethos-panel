@@ -27,16 +27,20 @@ Below are the correct steps for installing.
 (assuming /var/www/html is empty)
 
     cd /var/www/html
-    sudo chown -R www-data:www-data /var/www/html
-    sudo a2enmod rewrite
-    sudo service apache2 restart
     git clone https://github.com/foraern/ethos-panel.git .
+    sudo chown -R www-data:www-data /var/www/html
+    sudo a2enmod rewrite 
+    sudo apt-get update
+    sudo apt-get install curl
+    sudo apt-get install php-curl
+    sudo service apache2 restart
+    crontab -e 
+
+in crontab add:
+
+    */10 * * * * cd /var/www/html/ && ./cron
 
 then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
-
-You can get your mysql password with the following:
-
-    tail /root/.digitalocean_password
 
 
 # WORK IN PROGRESS
