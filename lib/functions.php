@@ -210,6 +210,18 @@ class functions
 			echo "Error: " . $sql . "<br>" . $this->db->error;
 		}
 	}
+	
+	public function countrigs()
+	{
+		$sql = "SELECT count(distinct rig) as rigs from hash";
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$count = $result->fetch_object();
+			return $count->rigs;
+		}
+	}
 
 	public function getchart()
 	{

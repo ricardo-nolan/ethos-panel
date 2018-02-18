@@ -54,6 +54,7 @@ if(!empty($f->stats['rigs']))
 }
 $contentdata["data"]=$f->getchart();
 $contentdata["news"]=$f->getnews();
+$contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
 echo $f->getcontent('./templates/main.html',$contentdata);
 
 
