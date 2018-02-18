@@ -194,7 +194,7 @@ class functions
 							. "'" . $rig . "','" . $data['hash'] . "') "
 							. "ON DUPLICATE KEY UPDATE "
 							. "userid='" . $user->id . "', "
-							. "date='" . date('d-m-Y H:i') . "', "
+							. "date='" . date('Y-m-d H:i:00') . "', "
 							. "rig='" . $rig . "', "
 							. "hash='" . $data['hash'] . "'";
 					if($this->db->query($sql) !== TRUE)
