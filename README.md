@@ -12,12 +12,33 @@ To setup on your own server, simply copy/clone the files to your webserver, impo
 
 You can also use the installation script as follows:
 Log into your server via ssh, and run:
+(assuming /var/www/html is empty)
 
-`chown -R www-data:www-data /var/www/html`
+    chown -R www-data:www-data /var/www/html
+    cd /var/www/html
+    git clone https://github.com/foraern/ethos-panel.git
 
-`cd /var/www/html`
+then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
 
-`git clone https://github.com/foraern/ethos-panel.git`
+
+#### If installing on digital ocean
+
+Below are the correct steps for installing.
+(assuming /var/www/html is empty)
+
+    cd /var/www/html
+    git clone https://github.com/foraern/ethos-panel.git .
+    sudo chown -R www-data:www-data /var/www/html
+    sudo a2enmod rewrite 
+    sudo apt-get update
+    sudo apt-get install curl
+    sudo apt-get install php-curl
+    sudo service apache2 restart
+    crontab -e 
+
+in crontab add:
+
+    */10 * * * * cd /var/www/html/ && ./cron
 
 then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
 
