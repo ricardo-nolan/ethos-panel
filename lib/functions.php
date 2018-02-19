@@ -213,9 +213,10 @@ class functions
 	
 	public function countrigs()
 	{
-		$sql = "SELECT count(distinct rig) as rigs from hash";
+		$sql = "SELECT count(distinct rig) as rigs from hash where userid = ?";
 		if($stmt = $this->db->prepare($sql))
 		{
+			$stmt->bind_param("s", $this->user->id);
 			$stmt->execute();
 			$result = $stmt->get_result();
 			$count = $result->fetch_object();
