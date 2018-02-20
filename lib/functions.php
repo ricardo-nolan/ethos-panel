@@ -1,5 +1,5 @@
 <?php
-
+define('BASEPATH', true);
 /*
  * The MIT License
  *
@@ -36,9 +36,8 @@ class functions
 
 	public function __construct()
 	{
-		$this->home_dir = getcwd();
-		$this->getconfig();
-		$this->db = new mysqli($this->config->db_servername, $this->config->db_username, $this->config->db_password, $this->config->db_name);
+		include('config/config.php');
+		$this->db = new mysqli(HOST, USER, PASSWORD, DB_NAME);
 		if($this->db->connect_error)
 		{
 			die("Connection failed: " . $this->db->connect_error);
