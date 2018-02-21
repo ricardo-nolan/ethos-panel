@@ -38,16 +38,14 @@ class functions
 	{
 		$this->home_dir = getcwd();
 		$this->getconfig();
-		$this->db = new mysqli($this->config->db_servername, $this->config->db_username, $this->config->db_password, $this->config->db_name);
-		if($this->db->connect_error)
+		try
 		{
-			die("Connection failed: " . $this->db->connect_error);
+			$this->db = new PDO("mysql:host={$this->config->db_servername};dbname={$this->config->db_name}", $this->config->db_username, $this->config->db_password);
 		}
-	}
-
-	public function __destruct()
-	{
-		$this->db->close();
+		catch(PDOException $e)
+		{
+			die("Connection failed: " . $e->getMessage());
+		}
 	}
 
 	public function getconfig()
@@ -65,15 +63,15 @@ class functions
 
 	public function getuser($uid)
 	{
-		$sql = "SELECT id,email,url,usercode from users where id = ?";
+		$sql = "SELECT id,email,url,usercode from users where id = :uid";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bind_param("i", $uid);
+			$stmt->bindParam(":uid", $uid);
 			$stmt->execute();
-			$result = $stmt->get_result();
-			if($result->num_rows > 0)
+			
+			if($stmt->rowCount() > 0)
 			{
-				$user = $result->fetch_object();
+				$user = $stmt->fetchObject();
 				$this->user = $user;
 			}
 		}
@@ -85,44 +83,45 @@ class functions
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
-			$result = $stmt->get_result();
-			if($result->num_rows > 0)
+			
+			if($stmt->rowCount() > 0)
 			{
-				return $result;
+				return $stmt;
 			}
 		}
 	}
 
 	public function login($email, $password)
 	{
-		$sql = "SELECT id,password from users where email = ?";
+		$sql = "SELECT id,password from users where email = :email";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bind_param("s", $email);
+			$stmt->bindParam(":email", $email);
 			$stmt->execute();
-			$result = $stmt->get_result();
-			if($result->num_rows > 0)
+			
+			if($stmt->rowCount() > 0)
 			{
-				$user = $result->fetch_object();
+				$user = $stmt->fetchObject();
 				if(password_verify($password, $user->password))
 				{
 					$_SESSION['uid'] = $user->id;
 				}
 				else
 				{
-					echo "failed login";
 					return false;
 				}
 			}
 			else
 			{
-				$sql = "INSERT INTO users (email,password) values(?,?)";
+				$sql = "INSERT INTO users (email,password) values(:email,:password)";
 				if($stmt = $this->db->prepare($sql))
 				{
 					$hashedpassword = password_hash($password, PASSWORD_DEFAULT);
-					$stmt->bind_param("ss", $email, $hashedpassword);
+					
+					$stmt->bindParam(":email", $email);
+					$stmt->bindParam(":password", $hashedpassword);
 					$stmt->execute();
-					$_SESSION['uid'] = $stmt->insert_id;
+					$_SESSION['uid'] = $this->db->lastInsertId();
 				}
 				else
 				{
@@ -140,11 +139,12 @@ class functions
 
 	public function changepassword($password)
 	{
-		$sql = "UPDATE users set password=? where id=?";
+		$sql = "UPDATE users set password=:password where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$hashedpassword = password_hash($password, PASSWORD_DEFAULT);
-			$stmt->bind_param("si", $hashedpassword, $_SESSION['uid']);
+			$stmt->bindParam(":password", $hashedpassword);
+			$stmt->bindParam(":uid", $_SESSION['uid']);
 			$stmt->execute();
 		}
 		else
@@ -155,12 +155,14 @@ class functions
 
 	public function saveprofile($url)
 	{
-		$sql = "UPDATE users set url=?, usercode=? where id=?";
+		$sql = "UPDATE users set url=:url, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
 			preg_match($regex, $url, $usercode);
-			$stmt->bind_param("ssi", $url, $usercode[1], $_SESSION['uid']);
+			$stmt->bindParam(":url", $url);
+			$stmt->bindParam(":usercode", $usercode[1]);
+			$stmt->bindParam(":uid", $_SESSION['uid']);
 			$stmt->execute();
 		}
 		else
@@ -173,14 +175,16 @@ class functions
 	{
 		$tstats = array();
 		$this->getuser($_SESSION['uid']);
-		$this->stats = $this->makerequest($this->user->url, "", 1);
+		if(!empty($this->user->url)){
+			$this->stats = $this->makerequest($this->user->url, "", 1);
+		}
 	}
 
 	public function getstats()
 	{
 		$tstats = array();
-		$result = $this->getusers();
-		while($user = $result->fetch_object())
+		$stmt = $this->getusers();
+		while($user = $stmt->fetchObject())
 		{
 			if(!empty($user->url))
 			{
@@ -210,34 +214,34 @@ class functions
 			echo "Error: " . $sql . "<br>" . $this->db->error;
 		}
 	}
-	
+
 	public function countrigs()
 	{
 		$sql = "SELECT count(distinct rig) as rigs from hash";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
-			$result = $stmt->get_result();
-			$count = $result->fetch_object();
+			
+			$count = $stmt->fetchObject();
 			return $count->rigs;
 		}
 	}
 
 	public function getchart()
 	{
-		$sql = "SELECT * from hash where userid = ?";
+		$sql = "SELECT * from hash where userid = :uid";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bind_param("s", $this->user->id);
+			$stmt->bindParam(":uid", $this->user->id);
 			$stmt->execute();
-			$result = $stmt->get_result();
-			if($result->num_rows > 0)
+			
+			if($stmt->rowCount() > 0)
 			{
 
 				$stats = array();
 				$counter = -1;
 				$tdate = "";
-				while($row = $result->fetch_object())
+				while($row = $stmt->fetchObject())
 				{
 					if($tdate != $row->date)
 					{
@@ -265,21 +269,21 @@ class functions
 
 		return $template;
 	}
-	
+
 	public function getnews()
 	{
 		$sql = "SELECT * from news order by date desc limit 0,10";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
-			$result = $stmt->get_result();
-			if($result->num_rows > 1)
+			
+			if($stmt->rowCount() > 1)
 			{
-				$news="";
-				while($row = $result->fetch_object())
+				$news = "";
+				while($row = $stmt->fetchObject())
 				{
-					$date=explode(" ",$row->date);
-					$news.="<li>[".$date[0]."] ".$row->content."</li>";
+					$date = explode(" ", $row->date);
+					$news .= "<li>[" . $date[0] . "] " . $row->content . "</li>";
 				}
 				return $news;
 			}
@@ -292,15 +296,15 @@ class functions
 
 	public function getremoteconf($usercode)
 	{
-		$sql = "SELECT conf from remoteconf join users on remoteconf.userid=users.id where users.usercode=?";
+		$sql = "SELECT conf from remoteconf join users on remoteconf.userid=users.id where users.usercode=:usercode";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bind_param("s", $usercode);
+			$stmt->bindParam(":usercode", $usercode);
 			$stmt->execute();
-			$result = $stmt->get_result();
-			if($result->num_rows == 1)
+			
+			if($stmt->rowCount() == 1)
 			{
-				$row = $result->fetch_object();
+				$row = $stmt->fetchObject();
 				return $row->conf;
 			}
 			else
@@ -313,11 +317,12 @@ class functions
 	public function saveremoteconf($conf)
 	{
 
-		$sql = "INSERT into remoteconf (userid,conf) values(?,?) "
-				. "ON DUPLICATE KEY UPDATE conf=?";
+		$sql = "INSERT into remoteconf (userid,conf) values(:uid,:conf) "
+				. "ON DUPLICATE KEY UPDATE conf=:conf";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bind_param("iss", $this->user->id, $conf, $conf);
+			$stmt->bindParam(":uid", $this->user->id);
+			$stmt->bindParam(":conf", $conf);
 			$stmt->execute();
 		}
 		else
