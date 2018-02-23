@@ -45,4 +45,5 @@ if(!empty($_POST['url']))
 $contentdata["email"] = $f->user->email;
 $contentdata["url"] = $f->user->url;
 $contentdata["news"]=$f->getnews();
+$contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
 echo $f->getcontent('./templates/profile.html', $contentdata);
