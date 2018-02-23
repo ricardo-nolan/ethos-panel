@@ -18,8 +18,6 @@ Log into your server via ssh, and run:
     cd /var/www/html
     git clone https://github.com/foraern/ethos-panel.git
 
-then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
-
 
 #### If installing on digital ocean
 
@@ -35,6 +33,9 @@ Below are the correct steps for installing.
     sudo apt-get install php-curl
     sudo service apache2 restart
     crontab -e 
+
+
+
 
 in crontab add:
 
