@@ -203,7 +203,7 @@ class functions
 							. "hash='" . $data['hash'] . "'";
 					if($this->db->exec($sql) !== TRUE)
 					{
-						echo "Error: " . $sql . "<br>" . $this->db->errorInfo();
+						echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(),1);
 					}
 				}
 			}
@@ -211,7 +211,7 @@ class functions
 		$sql = "DELETE from hash WHERE DATE(date) < DATE(NOW() - INTERVAL 7 DAY)";
 		if($this->db->exec($sql) !== TRUE)
 		{
-			echo "Error: " . $sql . "<br>" . $this->db->errorInfo();
+			echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(),1);
 		}
 	}
 
