@@ -177,7 +177,7 @@ THE SOFTWARE.
 							</div>
 							<!-- /.panel-heading -->
 							<div class="panel-body">
-								<div class="table-responsive">
+								<div>
 									<table id="rigtable" class="table table-bordered table-hover table-striped"  cellspacing="0" width="100%">
 										<thead>
 											<tr>
@@ -256,6 +256,7 @@ THE SOFTWARE.
 					]
 				} );
 
+
 				function loaddata() {
 					$.getJSON("data.php?getchart=true", function (data) {
 						graph.setData(data);
@@ -265,6 +266,7 @@ THE SOFTWARE.
 						$('#rigcounter').html(data);
 					});
 					dtable.ajax.reload();
+
 				}
 		
 				loaddata(); // This will run on page load
