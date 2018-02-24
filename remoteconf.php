@@ -47,6 +47,7 @@ else
 	if(empty($f->user->usercode))
 	{
 		$contentdata['remoteurl'] = "Please configure your url in the profile section";
+		$contentdata['value'] = file_get_contents('./sampleconf');
 	}
 	else
 	{
