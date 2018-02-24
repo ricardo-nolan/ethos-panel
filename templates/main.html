@@ -178,7 +178,7 @@ THE SOFTWARE.
 							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<div class="table-responsive">
-									<table id="rigtable" class="table table-bordered table-hover table-striped">
+									<table id="rigtable" class="table table-bordered table-hover table-striped"  cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th>Rig / Worker</th>
@@ -243,7 +243,18 @@ THE SOFTWARE.
 					smooth: false
 				});
 
-				var dtable = $('#rigtable').DataTable( {"ajax": 'data.php?gettable=true'} );
+				var dtable = $('#rigtable').DataTable( {
+					"ajax": 'data.php?gettable=true',
+					"columns": [
+						{ "width": "15%" },
+						null,
+						null,
+						null,
+						{ "width": "15%" },
+						{ "width": "15%" },
+						{ "width": "15%" }
+					]
+				} );
 
 				function loaddata() {
 					$.getJSON("data.php?getchart=true", function (data) {
