@@ -201,17 +201,17 @@ class functions
 							. "date='" . date('Y-m-d H:i:00') . "', "
 							. "rig='" . $rig . "', "
 							. "hash='" . $data['hash'] . "'";
-					if($this->db->query($sql) !== TRUE)
+					if($this->db->exec($sql) !== TRUE)
 					{
-						echo "Error: " . $sql . "<br>" . $this->db->errorCode();
+						echo "Error: " . $sql . "<br>" . $this->db->errorInfo();
 					}
 				}
 			}
 		}
 		$sql = "DELETE from hash WHERE DATE(date) < DATE(NOW() - INTERVAL 7 DAY)";
-		if($this->db->query($sql) !== TRUE)
+		if($this->db->exec($sql) !== TRUE)
 		{
-			echo "Error: " . $sql . "<br>" . $this->db->errorCode();
+			echo "Error: " . $sql . "<br>" . $this->db->errorInfo();
 		}
 	}
 
