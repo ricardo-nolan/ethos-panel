@@ -32,13 +32,10 @@ if(!isset($_SESSION['uid'])){
 $f->getuser($_SESSION['uid']);
 $f->getuserstats();
 $table="";
+
 if(!empty($f->stats['rigs']))
 {
-	foreach($f->stats['rigs'] as $key=>$value){
-		$keys[] = "'" . $key . "'";
-	}
-	$contentdata["keys"]=implode(",",$keys);
-	
+	$contentdata["keys"]="'".implode("','",array_keys($f->stats['rigs']))."'";
 }
 
 $contentdata["data"]=$f->getchart();
