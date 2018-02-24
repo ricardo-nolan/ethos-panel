@@ -35,23 +35,12 @@ $table="";
 if(!empty($f->stats['rigs']))
 {
 	foreach($f->stats['rigs'] as $key=>$value){
-		$value['miner_hashes']=implode(" ",array_map('round',explode(" ",$value['miner_hashes'])));
-		$value['temp']=implode(" ",array_map('round',explode(" ",$value['temp'])));
-		$value['fanrpm']=implode(" ",array_map(function($input) { return round($input / 1000); },explode(" ",$value['fanrpm'])));
-		$table.="<tr>"
-				. "<td>{$key} / {$value['rack_loc']}</td>"
-				. "<td>{$value['ip']}</td>"
-				. "<td>{$value['miner_instance']} / {$value['gpus']}</td>"
-				. "<td>{$value['hash']}</td>"
-				. "<td>{$value['miner_hashes']}</td>"
-				. "<td>{$value['temp']}</td>"
-				. "<td>{$value['fanrpm']}</td>"
-				. "</tr>";
 		$keys[] = "'" . $key . "'";
 	}
-	$contentdata["table"]=$table;
 	$contentdata["keys"]=implode(",",$keys);
+	
 }
+
 $contentdata["data"]=$f->getchart();
 $contentdata["news"]=$f->getnews();
 $contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";

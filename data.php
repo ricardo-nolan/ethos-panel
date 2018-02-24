@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2018 ricardonolan.
@@ -26,6 +26,37 @@
 
 session_start();
 include('lib/functions.php');
-$f=new functions();
+$f = new functions();
 $f->getuser($_SESSION['uid']);
-echo $f->getchart();
+if(isset($_GET['getchart']) && $_GET['getchart'] == "true")
+{
+	echo $f->getchart();
+}
+if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
+{
+	$f->getuserstats();
+	if(!empty($f->stats['rigs']))
+	{
+		$data=array();
+		foreach($f->stats['rigs'] as $key => $value)
+		{
+			$value['miner_hashes'] = implode(" ", array_map('round', explode(" ", $value['miner_hashes'])));
+			$value['temp'] = implode(" ", array_map('round', explode(" ", $value['temp'])));
+			$value['fanrpm'] = implode(" ", array_map(function($input){return round($input / 1000);}, explode(" ", $value['fanrpm'])));
+			$data["data"][]= array(
+					$key." / ".$value['rack_loc'],
+					$value['ip'],
+					$value['miner_instance']." / ".$value['gpus'],
+					$value['hash'],
+					$value['miner_hashes'],
+					$value['temp'],
+					$value['fanrpm']);
+		}
+		echo json_encode($data,1);
+	}
+}
+
+if(isset($_GET['getrigcount']) && $_GET['getrigcount'] == "true")
+{
+	echo "(".$f->countrigs()." rigs and counting!)";
+}

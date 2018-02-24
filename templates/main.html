@@ -41,6 +41,12 @@ THE SOFTWARE.
 
 		<!-- MetisMenu CSS -->
 		<link href="/assets/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+		
+		<!-- DataTables CSS -->
+		<link href="/assets/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+		<!-- DataTables Responsive CSS -->
+		<link href="/assets/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
 
 		<!-- Custom CSS -->
 		<link href="/assets/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -111,7 +117,7 @@ THE SOFTWARE.
 								<a><i class="fa fa-clock-o fa-fw"></i> Next update: <strong id="clock">00:00</strong></a>
 							</li>
 							<li>
-								<a><i class="fa fa-cubes fa-fw"></i> <strong><!--%%rigs%%--></strong></a>
+								<a><i class="fa fa-cubes fa-fw"></i> <strong id="rigcounter"><!--%%rigs%%--></strong></a>
 							</li>
 							<li>
 								<a href="mailto:info@ethos-panel.com"><i class="fa fa-envelope-o fa-fw"></i> info@ethos-panel.com</a>
@@ -172,7 +178,7 @@ THE SOFTWARE.
 							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<div class="table-responsive">
-									<table class="table table-bordered table-hover table-striped">
+									<table id="rigtable" class="table table-bordered table-hover table-striped">
 										<thead>
 											<tr>
 												<th>Rig / Worker</th>
@@ -212,6 +218,11 @@ THE SOFTWARE.
 
 		<!-- Metis Menu Plugin JavaScript -->
 		<script src="/assets/vendor/metisMenu/metisMenu.min.js"></script>
+		
+		<!-- DataTables JavaScript -->
+		<script src="/assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+		<script src="/assets/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+		<script src="/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
 		<!-- Morris Charts JavaScript -->
 		<script src="/assets/vendor/raphael/raphael.min.js"></script>
@@ -221,7 +232,7 @@ THE SOFTWARE.
 
 				var graph = Morris.Line({
 					element: 'morris-area-chart',
-					data: <!--%%data%%-->,
+					data:<!--%%data%%-->,
 					xkey: 'date',
 					ykeys: [<!--%%keys%%-->],
 					labels: [<!--%%keys%%-->],
@@ -231,29 +242,34 @@ THE SOFTWARE.
 					resize: true,
 					smooth: false
 				});
+
+				var dtable = $('#rigtable').DataTable( {"ajax": 'data.php?gettable=true'} );
+
 				function loaddata() {
-					$.getJSON("data.php", function (data) {
+					$.getJSON("data.php?getchart=true", function (data) {
 						graph.setData(data);
 						graph.redraw();
 					});
+					$.get("data.php?getrigcount=true", function (data) {
+						$('#rigcounter').html(data);
+					});
+					dtable.ajax.reload();
 				}
-
+		
 				loaddata(); // This will run on page load
-				setInterval(function () {
-					loaddata() // this will run after every 5 seconds
-				}, 30000);
-				
+				setInterval(function () {loaddata()}, 30000);
+
 				setInterval(function() {
-						var currentTime = new Date();
-						var minutes = currentTime.getMinutes();
-						var seconds = currentTime.getSeconds();
-						var minutesleft = 9 - (minutes % 10);
-						var secondsleft = 59 - seconds;
-						minutes = (minutesleft < 10 ? "0" : "") + minutesleft;
-						seconds = (secondsleft < 10 ? "0" : "") + secondsleft;
-						var currentTimeString = minutes + ":" + seconds;
-						$("#clock").html(currentTimeString);
-					}, 1000);
+					var currentTime = new Date();
+					var minutes = currentTime.getMinutes();
+					var seconds = currentTime.getSeconds();
+					var minutesleft = 9 - (minutes % 10);
+					var secondsleft = 59 - seconds;
+					minutes = (minutesleft < 10 ? "0" : "") + minutesleft;
+					seconds = (secondsleft < 10 ? "0" : "") + secondsleft;
+					var currentTimeString = minutes + ":" + seconds;
+					$("#clock").html(currentTimeString);
+				}, 1000);
 			});
 		</script>
 		<!-- Custom Theme JavaScript -->
