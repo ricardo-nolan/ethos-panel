@@ -68,7 +68,7 @@ class functions
 		{
 			$stmt->bindParam(":uid", $uid);
 			$stmt->execute();
-			
+
 			if($stmt->rowCount() > 0)
 			{
 				$user = $stmt->fetchObject();
@@ -83,7 +83,7 @@ class functions
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
-			
+
 			if($stmt->rowCount() > 0)
 			{
 				return $stmt;
@@ -98,7 +98,7 @@ class functions
 		{
 			$stmt->bindParam(":email", $email);
 			$stmt->execute();
-			
+
 			if($stmt->rowCount() > 0)
 			{
 				$user = $stmt->fetchObject();
@@ -117,7 +117,7 @@ class functions
 				if($stmt = $this->db->prepare($sql))
 				{
 					$hashedpassword = password_hash($password, PASSWORD_DEFAULT);
-					
+
 					$stmt->bindParam(":email", $email);
 					$stmt->bindParam(":password", $hashedpassword);
 					$stmt->execute();
@@ -175,7 +175,8 @@ class functions
 	{
 		$tstats = array();
 		$this->getuser($_SESSION['uid']);
-		if(!empty($this->user->url)){
+		if(!empty($this->user->url))
+		{
 			$this->stats = $this->makerequest($this->user->url, "", 1);
 		}
 	}
@@ -189,21 +190,24 @@ class functions
 			if(!empty($user->url))
 			{
 				$this->stats = $this->makerequest($user->url, "", 1);
-				foreach($this->stats['rigs'] as $rig => $data)
+				if(isset($this->stats['rigs']) && !empty($this->stats['rigs']))
 				{
-					$sql = "INSERT INTO hash (userid,date, rig, hash) "
-							. "values("
-							. "'" . $user->id . "',"
-							. "'" . date('Y-m-d H:i:00') . "',"
-							. "'" . $rig . "','" . $data['hash'] . "') "
-							. "ON DUPLICATE KEY UPDATE "
-							. "userid='" . $user->id . "', "
-							. "date='" . date('Y-m-d H:i:00') . "', "
-							. "rig='" . $rig . "', "
-							. "hash='" . $data['hash'] . "'";
-					if($this->db->exec($sql) !== TRUE)
+					foreach($this->stats['rigs'] as $rig => $data)
 					{
-						echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(),1);
+						$sql = "INSERT INTO hash (userid,date, rig, hash) "
+								. "values("
+								. "'" . $user->id . "',"
+								. "'" . date('Y-m-d H:i:00') . "',"
+								. "'" . $rig . "','" . $data['hash'] . "') "
+								. "ON DUPLICATE KEY UPDATE "
+								. "userid='" . $user->id . "', "
+								. "date='" . date('Y-m-d H:i:00') . "', "
+								. "rig='" . $rig . "', "
+								. "hash='" . $data['hash'] . "'";
+						if($this->db->exec($sql) !== TRUE)
+						{
+							echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(), 1);
+						}
 					}
 				}
 			}
@@ -211,7 +215,7 @@ class functions
 		$sql = "DELETE from hash WHERE DATE(date) < DATE(NOW() - INTERVAL 7 DAY)";
 		if($this->db->exec($sql) !== TRUE)
 		{
-			echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(),1);
+			echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(), 1);
 		}
 	}
 
@@ -221,7 +225,7 @@ class functions
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
-			
+
 			$count = $stmt->fetchObject();
 			return $count->rigs;
 		}
@@ -234,7 +238,7 @@ class functions
 		{
 			$stmt->bindParam(":uid", $this->user->id);
 			$stmt->execute();
-			
+
 			if($stmt->rowCount() > 0)
 			{
 
@@ -276,7 +280,7 @@ class functions
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
-			
+
 			if($stmt->rowCount() > 1)
 			{
 				$news = "";
@@ -301,7 +305,7 @@ class functions
 		{
 			$stmt->bindParam(":usercode", $usercode);
 			$stmt->execute();
-			
+
 			if($stmt->rowCount() == 1)
 			{
 				$row = $stmt->fetchObject();
