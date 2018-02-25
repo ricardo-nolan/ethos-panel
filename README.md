@@ -43,6 +43,7 @@ in crontab add:
 
 then point your browser to: `http://yourserver/install/install.php` and fill in with appropriate info.
 
+For profitability calculators, please obtain an API key at https://www.coinwarz.com/v1/api/documentation and provide it in config.json
 
 # WORK IN PROGRESS
 
