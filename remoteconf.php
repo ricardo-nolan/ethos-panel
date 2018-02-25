@@ -26,7 +26,9 @@
 
 session_start();
 include('lib/functions.php');
+include('lib/calc.php');
 $f = new functions();
+$c = new calc();
 
 if(isset($_GET['usercode']))
 {
@@ -38,6 +40,7 @@ else
 	{
 		header('location: /');
 	}
+	$f->getuserstats();
 	$f->getuser($_SESSION['uid']);
 	if(!empty($_POST['remoteconf']))
 	{
@@ -58,8 +61,18 @@ else
 		}
 		$contentdata['remoteurl'] = "<a href='http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->usercode . "' target='_blank'>http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->usercode . "</a>";
 	}
-	$contentdata["news"]=$f->getnews();
-	$contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
+	$contentdata["news"] = $f->getnews();
+	$contentdata["rigs"] = "(" . $f->countrigs() . " rigs and counting!)";
+	$total_hash = 0;
+	foreach($f->stats['rigs'] as $key => $value)
+	{
+		$hashes = explode(" ", $value['miner_hashes']);
+		$total_hash += array_sum($hashes);
+	}
+	$price = $c->getprice("Ethereum");
+	$profit = $c->geteth($total_hash);
+	$contentdata['profitusd'] = round($profit * $price[0]->price_usd, 2) . " USD";
+	$contentdata['profiteur'] = round($profit * $price[0]->price_eur, 2) . " EUR";
 	echo $f->getcontent('./templates/remoteconf.html', $contentdata);
 }
 

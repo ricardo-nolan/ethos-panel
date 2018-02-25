@@ -26,10 +26,13 @@
 
 session_start();
 include('lib/functions.php');
-$f = new functions();
+include('lib/calc.php');
+$f=new functions();
+$c=new calc();
 if(!isset($_SESSION['uid'])){
 	header('location: /');
 }
+$f->getuserstats();
 $f->getuser($_SESSION['uid']);
 if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['password'] == $_POST['confirmpassword'])
 {
@@ -46,4 +49,14 @@ $contentdata["email"] = $f->user->email;
 $contentdata["url"] = $f->user->url;
 $contentdata["news"]=$f->getnews();
 $contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
+$total_hash=0;
+foreach($f->stats['rigs'] as $key => $value)
+{
+	$hashes = explode(" ", $value['miner_hashes']);
+	$total_hash+=array_sum($hashes);
+}
+$price=$c->getprice("Ethereum");
+$profit=$c->geteth($total_hash);
+$contentdata['profitusd']=round($profit * $price[0]->price_usd,2)." USD";
+$contentdata['profiteur']=round($profit * $price[0]->price_eur,2)." EUR";
 echo $f->getcontent('./templates/profile.html', $contentdata);
