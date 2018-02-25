@@ -117,6 +117,9 @@ THE SOFTWARE.
 								<a href="mailto:info@ethos-panel.com"><i class="fa fa-envelope-o fa-fw"></i> info@ethos-panel.com</a>
 							</li>
 							<li>
+								<a><i class="fa fa-bar-chart-o fa-fw"></i>ETH Profit/day: <strong id="profiteth"><!--%%profiteth%%--></strong></a>
+							</li>
+							<li>
 								<a><i class="fa fa-bar-chart-o fa-fw"></i>ETH Profit/day: <strong id="profitusd"><!--%%profitusd%%--></strong></a>
 							</li>
 							<li>
@@ -218,6 +221,9 @@ THE SOFTWARE.
 				function loaddata() {
 					$.get("data.php?getrigcount=true", function (data) {
 						$('#rigcounter').html(data);
+					});
+					$.get("data.php?getprofiteth=true", function (data) {
+						$('#profiteth').html(data);
 					});
 					$.get("data.php?getprofitusd=true", function (data) {
 						$('#profitusd').html(data);

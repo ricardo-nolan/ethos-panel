@@ -66,6 +66,20 @@ if(isset($_GET['getrigcount']) && $_GET['getrigcount'] == "true")
 	echo "(" . $f->countrigs() . " rigs and counting!)";
 }
 
+if(isset($_GET['getprofiteth']) && $_GET['getprofiteth'] == "true")
+{
+	$f->getuserstats();
+	$total_hash = 0;
+	foreach($f->stats['rigs'] as $key => $value)
+	{
+		$hashes = explode(" ", $value['miner_hashes']);
+		$total_hash += array_sum($hashes);
+	}
+	$price = $c->getprice("Ethereum");
+	$profit = $c->geteth($total_hash);
+	echo round($profit, 2) . " ETH";
+}
+
 if(isset($_GET['getprofitusd']) && $_GET['getprofitusd'] == "true")
 {
 	$f->getuserstats();
