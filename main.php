@@ -25,7 +25,9 @@
  */
 session_start();
 include('lib/functions.php');
+include('lib/calc.php');
 $f=new functions();
+$c=new calc();
 if(!isset($_SESSION['uid'])){
 	header('location: /');
 }
@@ -47,6 +49,16 @@ if(empty($f->user->url)){
 else{
 	$contentdata["urlwarning"]="";
 }
+$total_hash=0;
+foreach($f->stats['rigs'] as $key => $value)
+{
+	$hashes = explode(" ", $value['miner_hashes']);
+	$total_hash+=array_sum($hashes);
+}
+$price=$c->getprice("Ethereum");
+$profit=$c->geteth($total_hash);
+$contentdata['profitusd']=round($profit * $price[0]->price_usd,2)." USD";
+$contentdata['profiteur']=round($profit * $price[0]->price_eur,2)." EUR";
 echo $f->getcontent('./templates/main.html',$contentdata);
 
 

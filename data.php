@@ -26,7 +26,9 @@
 
 session_start();
 include('lib/functions.php');
+include('lib/calc.php');
 $f = new functions();
+$c = new calc();
 $f->getuser($_SESSION['uid']);
 if(isset($_GET['getchart']) && $_GET['getchart'] == "true")
 {
@@ -37,26 +39,57 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 	$f->getuserstats();
 	if(!empty($f->stats['rigs']))
 	{
-		$data=array();
+		$data = array();
 		foreach($f->stats['rigs'] as $key => $value)
 		{
 			$value['miner_hashes'] = implode(" ", array_map('round', explode(" ", $value['miner_hashes'])));
 			$value['temp'] = implode(" ", array_map('round', explode(" ", $value['temp'])));
-			$value['fanrpm'] = implode(" ", array_map(function($input){return round($input / 1000);}, explode(" ", $value['fanrpm'])));
-			$data["data"][]= array(
-					$key." / ".$value['rack_loc'],
-					$value['ip'],
-					$value['miner_instance']." / ".$value['gpus'],
-					$value['hash'],
-					$value['miner_hashes'],
-					$value['temp'],
-					$value['fanrpm']);
+			$value['fanrpm'] = implode(" ", array_map(function($input)
+					{
+						return round($input / 1000);
+					}, explode(" ", $value['fanrpm'])));
+			$data["data"][] = array(
+				$key . " / " . $value['rack_loc'],
+				$value['ip'],
+				$value['miner_instance'] . " / " . $value['gpus'],
+				$value['hash'],
+				$value['miner_hashes'],
+				$value['temp'],
+				$value['fanrpm']);
 		}
-		echo json_encode($data,1);
+		echo json_encode($data, 1);
 	}
 }
 
 if(isset($_GET['getrigcount']) && $_GET['getrigcount'] == "true")
 {
-	echo "(".$f->countrigs()." rigs and counting!)";
+	echo "(" . $f->countrigs() . " rigs and counting!)";
+}
+
+if(isset($_GET['getprofitusd']) && $_GET['getprofitusd'] == "true")
+{
+	$f->getuserstats();
+	$total_hash = 0;
+	foreach($f->stats['rigs'] as $key => $value)
+	{
+		$hashes = explode(" ", $value['miner_hashes']);
+		$total_hash += array_sum($hashes);
+	}
+	$price = $c->getprice("Ethereum");
+	$profit = $c->geteth($total_hash);
+	echo round($profit * $price[0]->price_usd, 2) . " USD";
+}
+
+if(isset($_GET['getprofiteur']) && $_GET['getprofiteur'] == "true")
+{
+	$f->getuserstats();
+	$total_hash = 0;
+	foreach($f->stats['rigs'] as $key => $value)
+	{
+		$hashes = explode(" ", $value['miner_hashes']);
+		$total_hash += array_sum($hashes);
+	}
+	$price = $c->getprice("Ethereum");
+	$profit = $c->geteth($total_hash);
+	echo round($profit * $price[0]->price_eur, 2) . " EUR";
 }

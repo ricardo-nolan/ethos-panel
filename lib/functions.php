@@ -335,8 +335,7 @@ class functions
 		}
 	}
 
-	public
-			function makerequest($url, $data = "", $json = false)
+	public function makerequest($url, $data = "", $json = false)
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
