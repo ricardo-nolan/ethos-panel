@@ -71,9 +71,10 @@ else
 	}
 	$price = $c->getprice("Ethereum");
 	$profit = $c->geteth($total_hash);
-	$contentdata['profiteth']=round($profit,2)." ETH";
-	$contentdata['profitusd'] = round($profit * $price[0]->price_usd, 2) . " USD";
-	$contentdata['profiteur'] = round($profit * $price[0]->price_eur, 2) . " EUR";
+	$contentdata['profiteth']=round($profit,4);
+	$contentdata['profitbtc']=round($profit * $price[0]->price_btc,4);
+	$contentdata['profitusd']=round($profit * $price[0]->price_usd,4);
+	$contentdata['profiteur']=round($profit * $price[0]->price_eur,4);
 	echo $f->getcontent('./templates/remoteconf.html', $contentdata);
 }
 

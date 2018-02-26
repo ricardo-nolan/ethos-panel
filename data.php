@@ -66,7 +66,7 @@ if(isset($_GET['getrigcount']) && $_GET['getrigcount'] == "true")
 	echo "(" . $f->countrigs() . " rigs and counting!)";
 }
 
-if(isset($_GET['getprofiteth']) && $_GET['getprofiteth'] == "true")
+if(isset($_GET['getprofit']) && $_GET['getprofit'] == "true")
 {
 	$f->getuserstats();
 	$total_hash = 0;
@@ -77,33 +77,23 @@ if(isset($_GET['getprofiteth']) && $_GET['getprofiteth'] == "true")
 	}
 	$price = $c->getprice("Ethereum");
 	$profit = $c->geteth($total_hash);
-	echo round($profit, 2) . " ETH";
+	$currency=(isset($_GET['currency'])&&$_GET['currency']!="")?$_GET['currency']:"eth";
+	switch($currency)
+	{
+		case "btc":
+			$curprice=$price[0]->price_btc;
+			break;
+		case "usd":
+			$curprice=$price[0]->price_usd;
+			break;
+		case "eur":
+			$curprice=$price[0]->price_eur;
+			break;
+		default:
+			$currency="eth";
+			$curprice=1;
+			break;
+	}
+	echo round($profit * $curprice, 4);
 }
 
-if(isset($_GET['getprofitusd']) && $_GET['getprofitusd'] == "true")
-{
-	$f->getuserstats();
-	$total_hash = 0;
-	foreach($f->stats['rigs'] as $key => $value)
-	{
-		$hashes = explode(" ", $value['miner_hashes']);
-		$total_hash += array_sum($hashes);
-	}
-	$price = $c->getprice("Ethereum");
-	$profit = $c->geteth($total_hash);
-	echo round($profit * $price[0]->price_usd, 2) . " USD";
-}
-
-if(isset($_GET['getprofiteur']) && $_GET['getprofiteur'] == "true")
-{
-	$f->getuserstats();
-	$total_hash = 0;
-	foreach($f->stats['rigs'] as $key => $value)
-	{
-		$hashes = explode(" ", $value['miner_hashes']);
-		$total_hash += array_sum($hashes);
-	}
-	$price = $c->getprice("Ethereum");
-	$profit = $c->geteth($total_hash);
-	echo round($profit * $price[0]->price_eur, 2) . " EUR";
-}

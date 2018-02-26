@@ -120,10 +120,13 @@ THE SOFTWARE.
 								<a><i class="fa fa-bar-chart-o fa-fw"></i>ETH Profit/day: <strong id="profiteth"><!--%%profiteth%%--></strong></a>
 							</li>
 							<li>
-								<a><i class="fa fa-bar-chart-o fa-fw"></i>ETH Profit/day: <strong id="profitusd"><!--%%profitusd%%--></strong></a>
+								<a><i class="fa fa-bar-chart-o fa-fw"></i>BTC Profit/day: <strong id="profitbtc"><!--%%profitbtc%%--></strong></a>
 							</li>
 							<li>
-								<a><i class="fa fa-bar-chart-o fa-fw"></i>ETH Profit/day: <strong id="profiteur"><!--%%profiteur%%--></strong></a>
+								<a><i class="fa fa-bar-chart-o fa-fw"></i>USD Profit/day: <strong id="profitusd"><!--%%profitusd%%--></strong></a>
+							</li>
+							<li>
+								<a><i class="fa fa-bar-chart-o fa-fw"></i>EUR Profit/day: <strong id="profiteur"><!--%%profiteur%%--></strong></a>
 							</li>
 						</ul>
 					</div>
@@ -222,13 +225,16 @@ THE SOFTWARE.
 					$.get("data.php?getrigcount=true", function (data) {
 						$('#rigcounter').html(data);
 					});
-					$.get("data.php?getprofiteth=true", function (data) {
+					$.get("data.php?getprofit=true&currency=eth", function (data) {
 						$('#profiteth').html(data);
 					});
-					$.get("data.php?getprofitusd=true", function (data) {
+					$.get("data.php?getprofit=true&currency=btc", function (data) {
+						$('#profitbtc').html(data);
+					});
+					$.get("data.php?getprofit=true&currency=usd", function (data) {
 						$('#profitusd').html(data);
 					});
-					$.get("data.php?getprofiteur=true", function (data) {
+					$.get("data.php?getprofit=true&currency=eur", function (data) {
 						$('#profiteur').html(data);
 					});
 
