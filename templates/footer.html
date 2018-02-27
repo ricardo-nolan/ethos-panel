@@ -1,0 +1,105 @@
+		</div>
+		<!-- /#wrapper -->
+		<footer class="footer">
+			<div class="container">
+				<span class="text-muted pull-right"><strong>Donations:</strong></span><br />
+				<span class="text-muted pull-right">BTC: 38c6SgdEUR4JwgZY3nKgDWjjz6adLZnJ1x</span><br />
+				<span class="text-muted pull-right">BCH: 1CGqJthGPaF3ws5miczof7TxVCnxf77g2Y</span><br />
+				<span class="text-muted pull-right">ETH: 0x534cf0F7a388f20a8EeC1B074CE233F882126E3D</span><br />
+				<span class="text-muted pull-right"><strong>Source Code:</strong></span><br />
+				<span class="text-muted pull-right"><a href="https://github.com/foraern/ethos-panel">https://github.com/foraern/ethos-panel</a></span>
+			</div>
+		</footer>
+		<!-- jQuery -->
+		<script src="/assets/vendor/jquery/jquery.min.js"></script>
+
+		<!-- Bootstrap Core JavaScript -->
+		<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+		<!-- Metis Menu Plugin JavaScript -->
+		<script src="/assets/vendor/metisMenu/metisMenu.min.js"></script>
+		
+		<!-- DataTables JavaScript -->
+		<script src="/assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+		<script src="/assets/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+		<script src="/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+		<!-- Morris Charts JavaScript -->
+		<script src="/assets/vendor/raphael/raphael.min.js"></script>
+												<script src="/assets/vendor/morrisjs/morris.min.js"></script>
+							<script>
+												$(function () {
+
+												var graph = Morris.Line({
+														element: 'morris-area-chart',
+												data:<!--%%data%%-->,
+							xkey: 'date',
+												ykeys: [<!--%%keys%%-->],
+										labels: [<!--%%keys%%-->],
+														behaveLikeLine: true,
+														pointSize: 1,
+												hideHover: 'auto',
+												resize: true,
+												smooth: false
+										});
+										
+														var dtable = $('#rigtable').DataTable( {
+														"ajax": 'data.php?gettable=true',
+														"columns": [
+														{ "width": "15%" },
+										null,
+														null,
+														null,
+														{ "width": "15%" },
+														{ "width": "15%" },
+														{ "width": "15%" }
+														]
+										} );
+														
+														
+														function loaddata() {
+																$.getJSON("data.php?getchart=true", function (data) {
+																graph.setData(data);
+																		graph.redraw();
+														});
+	$.get("data.php?getrigcount=true", function (data) {
+																		$('#rigcounter').html(data);
+	});
+	$.get("data.php?getprofit=true&currency=eth", function (data) {
+																		$('#profiteth').html(data);
+	});
+	$.get("data.php?getprofit=true&currency=btc", function (data) {
+																		$('#profitbtc').html(data);
+	});
+	$.get("data.php?getprofit=true&currency=usd", function (data) {
+																		$('#profitusd').html(data);
+	});
+	$.get("data.php?getprofit=true&currency=eur", function (data) {
+																		$('#profiteur').html(data);
+	});
+	dtable.ajax.reload();
+																		
+	}
+
+	loaddata(); // This will run on page load
+	setInterval(function () {loaddata()}, 30000);
+																		
+	setInterval(function() {
+																var currentTime = new Date();
+																var minutes = currentTime.getMinutes();
+																var seconds = currentTime.getSeconds();
+																var minutesleft = 9 - (minutes % 10);
+																var secondsleft = 59 - seconds;
+																minutes = (minutesleft < 10? "0" : "") +minutesleft;
+					seconds = (secondsleft < 10 ? "0" : "") + secondsleft;
+					var currentTimeString = minutes + ":" + seconds;
+					$("#clock").html(currentTimeString);
+				}, 1000);
+			});
+		</script>
+		<!-- Custom Theme JavaScript -->
+		<script src="/assets/dist/js/sb-admin-2.js"></script>
+
+	</body>
+
+</html>

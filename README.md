@@ -52,6 +52,6 @@ For profitability calculators, please obtain an API key at https://www.coinwarz.
 
 You can send donations to any of the following addresses:
 
-* BTC: `3JfgwF7t1mnwLkJZHMoRvgxMWj6EiZrVDk`
-* BCH: `1Nx8BPnihW3DukNNxywRpkBJ8K83ENzBQn`
-* ETH: `0x1281BAF53917c2058fFe7ac9Fa2a1d618E76a45C`
+* BTC: `38c6SgdEUR4JwgZY3nKgDWjjz6adLZnJ1x`
+* BCH: `1CGqJthGPaF3ws5miczof7TxVCnxf77g2Y`
+* ETH: `0x534cf0F7a388f20a8EeC1B074CE233F882126E3D`

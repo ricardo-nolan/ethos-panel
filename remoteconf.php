@@ -75,7 +75,9 @@ else
 	$contentdata['profitbtc']=round($profit * $price[0]->price_btc,4);
 	$contentdata['profitusd']=round($profit * $price[0]->price_usd,4);
 	$contentdata['profiteur']=round($profit * $price[0]->price_eur,4);
-	echo $f->getcontent('./templates/remoteconf.html', $contentdata);
+	echo $f->getcontent('./templates/header.html',$contentdata);
+	echo $f->getcontent('./templates/remoteconf.html',$contentdata);
+	echo $f->getcontent('./templates/footer.html',$contentdata);
 }
 
 
