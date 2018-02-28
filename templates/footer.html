@@ -57,7 +57,7 @@
 			});
 
 			function loaddata() {
-				$.getJSON("data.php?getchart=true&range=1", function (data) {
+				$.getJSON("data.php?getchart=true&range=1"+$('#chartrange').val(), function (data) {
 					graph.setData(data);
 					graph.redraw();
 				});
