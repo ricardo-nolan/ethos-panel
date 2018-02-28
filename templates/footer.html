@@ -50,7 +50,7 @@
 			});
 			
 			$('#chartrange').change(function() {
-				$.getJSON("data.php?getchart=true&range="+$(this).value(), function (data) {
+				$.getJSON("data.php?getchart=true&range="+$(this).val(), function (data) {
 					graph.setData(data);
 					graph.redraw();
 				});
