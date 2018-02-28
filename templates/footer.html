@@ -26,76 +26,64 @@
 
 		<!-- Morris Charts JavaScript -->
 		<script src="/assets/vendor/raphael/raphael.min.js"></script>
-												<script src="/assets/vendor/morrisjs/morris.min.js"></script>
-							<script>
-												$(function () {
+		<script src="/assets/vendor/morrisjs/morris.min.js"></script>
+		<script>
+		$(function () {
 
-												var graph = Morris.Line({
-														element: 'morris-area-chart',
-												data:<!--%%data%%-->,
-							xkey: 'date',
-												ykeys: [<!--%%keys%%-->],
-										labels: [<!--%%keys%%-->],
-														behaveLikeLine: true,
-														pointSize: 1,
-												hideHover: 'auto',
-												resize: true,
-												smooth: false
-										});
-										
-														var dtable = $('#rigtable').DataTable( {
-														"ajax": 'data.php?gettable=true',
-														"columns": [
-														{ "width": "15%" },
-										null,
-														null,
-														null,
-														{ "width": "15%" },
-														{ "width": "15%" },
-														{ "width": "15%" }
-														]
-										} );
-														
-														
-														function loaddata() {
-																$.getJSON("data.php?getchart=true", function (data) {
-																graph.setData(data);
-																		graph.redraw();
-														});
-	$.get("data.php?getrigcount=true", function (data) {
-																		$('#rigcounter').html(data);
-	});
-	$.get("data.php?getprofit=true&currency=eth", function (data) {
-																		$('#profiteth').html(data);
-	});
-	$.get("data.php?getprofit=true&currency=btc", function (data) {
-																		$('#profitbtc').html(data);
-	});
-	$.get("data.php?getprofit=true&currency=usd", function (data) {
-																		$('#profitusd').html(data);
-	});
-	$.get("data.php?getprofit=true&currency=eur", function (data) {
-																		$('#profiteur').html(data);
-	});
-	dtable.ajax.reload();
-																		
-	}
-
-	loaddata(); // This will run on page load
-	setInterval(function () {loaddata()}, 30000);
-																		
-	setInterval(function() {
-																var currentTime = new Date();
-																var minutes = currentTime.getMinutes();
-																var seconds = currentTime.getSeconds();
-																var minutesleft = 9 - (minutes % 10);
-																var secondsleft = 59 - seconds;
-																minutes = (minutesleft < 10? "0" : "") +minutesleft;
-					seconds = (secondsleft < 10 ? "0" : "") + secondsleft;
-					var currentTimeString = minutes + ":" + seconds;
-					$("#clock").html(currentTimeString);
-				}, 1000);
+			var graph = Morris.Line({
+				element: 'morris-area-chart',
+				data:<!--%%data%%-->,
+				xkey: 'date',
+				ykeys: [<!--%%keys%%-->],
+				labels: [<!--%%keys%%-->],
+				behaveLikeLine: true,
+				pointSize: 0,
+				lineWidth: 1,
+				hideHover: 'true',
+				resize: true,
+				smooth: false
 			});
+
+			var dtable = $('#rigtable').DataTable( {
+				"ajax": 'data.php?gettable=true',
+				"columns": [{ "width": "15%" },null,null,null,{ "width": "15%" },{ "width": "15%" },{ "width": "15%" }]
+			});
+			
+			$('#chartrange').change(function() {
+				$.getJSON("data.php?getchart=true&range="+$(this).value(), function (data) {
+					graph.setData(data);
+					graph.redraw();
+				});
+			});
+
+			function loaddata() {
+				$.getJSON("data.php?getchart=true&range=1", function (data) {
+					graph.setData(data);
+					graph.redraw();
+				});
+				dtable.ajax.reload();
+				$.get("data.php?getrigcount=true", function (data) {$('#rigcounter').html(data);});
+				$.get("data.php?getprofit=true&currency=eth", function (data) {$('#profiteth').html(data);});
+				$.get("data.php?getprofit=true&currency=btc", function (data) {$('#profitbtc').html(data);});
+				$.get("data.php?getprofit=true&currency=usd", function (data) {$('#profitusd').html(data);});
+				$.get("data.php?getprofit=true&currency=eur", function (data) {$('#profiteur').html(data);});
+			}
+
+			loaddata(); // This will run on page load
+			setInterval(function () {loaddata()}, 30000);
+
+			setInterval(function() {
+				var currentTime = new Date();
+				var minutes = currentTime.getMinutes();
+				var seconds = currentTime.getSeconds();
+				var minutesleft = 9 - (minutes % 10);
+				var secondsleft = 59 - seconds;
+				minutes = (minutesleft < 10? "0" : "") +minutesleft;
+				seconds = (secondsleft < 10 ? "0" : "") + secondsleft;
+				var currentTimeString = minutes + ":" + seconds;
+				$("#clock").html(currentTimeString);
+			}, 1000);
+		});
 		</script>
 		<!-- Custom Theme JavaScript -->
 		<script src="/assets/dist/js/sb-admin-2.js"></script>

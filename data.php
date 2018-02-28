@@ -32,7 +32,7 @@ $c = new calc();
 $f->getuser($_SESSION['uid']);
 if(isset($_GET['getchart']) && $_GET['getchart'] == "true")
 {
-	echo $f->getchart();
+	echo $f->getchart($_GET['range']);
 }
 if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 {

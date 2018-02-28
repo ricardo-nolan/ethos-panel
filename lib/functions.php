@@ -231,12 +231,13 @@ class functions
 		}
 	}
 
-	public function getchart()
+	public function getchart($range=1)
 	{
-		$sql = "SELECT * from hash where userid = :uid";
+		$sql = "SELECT * from hash where userid = :uid and DATE(date) > DATE(NOW() - INTERVAL :range DAY)";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->bindParam(":uid", $this->user->id);
+			$stmt->bindParam(":range", $range);
 			$stmt->execute();
 
 			if($stmt->rowCount() > 0)
