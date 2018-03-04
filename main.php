@@ -38,6 +38,18 @@ $table="";
 if(!empty($f->stats['rigs']))
 {
 	$contentdata["keys"]="'".implode("','",array_keys($f->stats['rigs']))."'";
+	$total_hash=0;
+	foreach($f->stats['rigs'] as $key => $value)
+	{
+		$hashes = explode(" ", $value['miner_hashes']);
+		$total_hash+=array_sum($hashes);
+	}
+	$price=$c->getprice("Ethereum");
+	$profit=$c->geteth($total_hash);
+	$contentdata['profiteth']=round($profit,4);
+	$contentdata['profitbtc']=round($profit * $price[0]->price_btc,4);
+	$contentdata['profitusd']=round($profit * $price[0]->price_usd,4);
+	$contentdata['profiteur']=round($profit * $price[0]->price_eur,4);
 }
 
 $contentdata["data"]=$f->getchart();
@@ -49,18 +61,9 @@ if(empty($f->user->url)){
 else{
 	$contentdata["urlwarning"]="";
 }
-$total_hash=0;
-foreach($f->stats['rigs'] as $key => $value)
-{
-	$hashes = explode(" ", $value['miner_hashes']);
-	$total_hash+=array_sum($hashes);
-}
-$price=$c->getprice("Ethereum");
-$profit=$c->geteth($total_hash);
-$contentdata['profiteth']=round($profit,4);
-$contentdata['profitbtc']=round($profit * $price[0]->price_btc,4);
-$contentdata['profitusd']=round($profit * $price[0]->price_usd,4);
-$contentdata['profiteur']=round($profit * $price[0]->price_eur,4);
+
+
+
 $contentdata['trackingcode']=$f->config->analytics;
 echo $f->getcontent('./templates/header.html',$contentdata);
 echo $f->getcontent('./templates/main.html',$contentdata);
