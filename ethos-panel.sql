@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.6.38)
+# Host: 165.227.119.49 (MySQL 5.7.21-0ubuntu0.16.04.1)
 # Database: ethos-panel
-# Generation Time: 2018-02-15 11:40:56 +0000
+# Generation Time: 2018-03-04 18:31:58 +0000
 # ************************************************************
 
 
@@ -20,6 +20,21 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
+# Dump of table blockinfo
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `blockinfo`;
+
+CREATE TABLE `blockinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `BlockReward` int(11) DEFAULT NULL,
+  `Difficulty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table hash
 # ------------------------------------------------------------
 
@@ -28,12 +43,26 @@ DROP TABLE IF EXISTS `hash`;
 CREATE TABLE `hash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
-  `date` varchar(20) NOT NULL,
+  `date` datetime NOT NULL,
   `rig` varchar(20) NOT NULL,
   `hash` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `main` (`userid`,`date`,`rig`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table news
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `news`;
+
+CREATE TABLE `news` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 
@@ -62,7 +91,7 @@ CREATE TABLE `users` (
   `email` varchar(55) NOT NULL,
   `password` varchar(100) NOT NULL DEFAULT '',
   `url` varchar(55) DEFAULT '',
-  `usercode` varchar(6) DEFAULT '',
+  `usercode` varchar(6) DEFAULT NULL,
   `resethash` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
