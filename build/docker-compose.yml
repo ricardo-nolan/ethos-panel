@@ -5,8 +5,6 @@ httpd:
         - 80:80
     links:
         - mysql
-    volumes_from:
-        - app
 
 mysql:
     container_name: sqlserver
@@ -15,24 +13,9 @@ mysql:
         - 3306:3306
     volumes:
         - ./sqlserver:/docker-entrypoint-initdb.d
-    volumes_from:
-        - data
     environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: ethos-panel
         MYSQL_USER: dbuser
         MYSQL_PASSWORD: dbpass
 
-data:
-    container_name: sqldata
-    image: mysql:latest
-    volumes:
-        - /var/lib/mysql
-    command: "true"
-
-app:
-    container_name: webdata
-    image: php:latest
-    volumes:
-        - ..:/var/www/html
-    command: "true"
