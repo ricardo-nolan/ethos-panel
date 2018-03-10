@@ -32,7 +32,7 @@ $c = new calc();
 
 if(isset($_GET['usercode']))
 {
-	echo str_replace("\n", "<br />", $f->getremoteconf($_GET['usercode']));
+	echo $f->getremoteconf($_GET['usercode']));
 }
 else
 {
