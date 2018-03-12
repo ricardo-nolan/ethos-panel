@@ -36,6 +36,8 @@ class functions
 
 	public function __construct()
 	{
+		ini_set("SMTP", "smtp.dynu.com");
+		ini_set("sendmail_from", "info@ethos-panel.com");
 		$this->home_dir = getcwd();
 		$this->getconfig();
 		try
