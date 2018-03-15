@@ -6,6 +6,10 @@ Also available at ethos-panel.com
 
 Includes Rigchecker to restart rig if a GPU crashes, and an autofan script which adjusts fans according to a range of temperatures.
 
+## Screenshots
+
+https://imgur.com/a/F3tfM
+
 ## Setup
 
 To setup on your own server, simply copy/clone the files to your webserver, import ethos-panel.sql into your MySQL server, and update config/config.json with your database details.
