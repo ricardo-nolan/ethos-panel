@@ -2,7 +2,7 @@
 
 An alternate control panel for Ethos mining rigs.
 
-Also available at ethos-panel.com
+Also available at https://ethos-panel.com
 
 Includes Rigchecker to restart rig if a GPU crashes, and an autofan script which adjusts fans according to a range of temperatures.
 
