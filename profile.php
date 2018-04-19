@@ -41,7 +41,7 @@ if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['pa
 if(!empty($_POST['url']))
 {
 	if (filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE) {
-		$f->saveprofile($_POST['url']);
+		$f->saveprofile($_POST['url'],$_POST['emailnotifications']);
 		$f->getuser($_SESSION['uid']);
 	}
 }

@@ -155,13 +155,14 @@ class functions
 		}
 	}
 
-	public function saveprofile($url)
+	public function saveprofile($url,$emailnotifications)
 	{
-		$sql = "UPDATE users set url=:url, usercode=:usercode where id=:uid";
+		$sql = "UPDATE users set url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
 			preg_match($regex, $url, $usercode);
+			$stmt->bindParam(":emailnotifications", ($emailnotifications==1?1:0));
 			$stmt->bindParam(":url", $url);
 			$stmt->bindParam(":usercode", $usercode[1]);
 			$stmt->bindParam(":uid", $_SESSION['uid']);
