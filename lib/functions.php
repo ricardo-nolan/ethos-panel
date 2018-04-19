@@ -160,9 +160,10 @@ class functions
 		$sql = "UPDATE users set url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
+			$emailnotifications=$emailnotifications==1?1:0;
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
 			preg_match($regex, $url, $usercode);
-			$stmt->bindParam(":emailnotifications", ($emailnotifications==1?1:0));
+			$stmt->bindParam(":emailnotifications", $emailnotifications);
 			$stmt->bindParam(":url", $url);
 			$stmt->bindParam(":usercode", $usercode[1]);
 			$stmt->bindParam(":uid", $_SESSION['uid']);
