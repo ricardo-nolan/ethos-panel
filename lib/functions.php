@@ -81,7 +81,7 @@ class functions
 
 	public function getusers()
 	{
-		$sql = "SELECT id,email,url from users";
+		$sql = "SELECT id,email,emailnotifications,url from users";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
