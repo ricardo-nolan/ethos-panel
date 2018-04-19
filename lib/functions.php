@@ -65,7 +65,7 @@ class functions
 
 	public function getuser($uid)
 	{
-		$sql = "SELECT id,email,url,usercode from users where id = :uid";
+		$sql = "SELECT id,email,emailnotifications,url,usercode from users where id = :uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->bindParam(":uid", $uid);
