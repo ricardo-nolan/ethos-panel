@@ -233,7 +233,26 @@ class functions
 		}
 	}
 
-	public function getchart($range=1)
+	public function checkrigs()
+	{
+		$this->getuserstats();
+		if(!empty($this->stats['rigs']))
+		{
+			$data = array();
+			foreach($this->stats['rigs'] as $key => $value)
+			{
+				$hashes = explode(" ", $value['miner_hashes']);
+				foreach($hashes as $hash){
+					$gpucrash = $hash <= $this->config->minimumhash?true:false;
+				}
+			}
+			if($gpucrash==true && $this->user->emailnotifications==1){
+				mail($this->user->email,"[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
+			}
+		}
+	}
+
+	public function getchart($range = 1)
 	{
 		$sql = "SELECT * from hash where userid = :uid and DATE(date) > DATE(NOW() - INTERVAL :range DAY)";
 		if($stmt = $this->db->prepare($sql))

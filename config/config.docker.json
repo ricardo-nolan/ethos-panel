@@ -1,6 +1,7 @@
 {
 	"autofan": 1,
 	"rigcheck": 1,
+	"minimumhash": 0,
 	"db_servername": "mysql",
 	"db_username": "dbuser",
 	"db_password": "dbpass",

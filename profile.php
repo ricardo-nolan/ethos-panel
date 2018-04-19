@@ -46,6 +46,7 @@ if(!empty($_POST['url']))
 	}
 }
 $contentdata["email"] = $f->user->email;
+$contentdata["emailnotifications"] = $f->user->emailnotifications;
 $contentdata["url"] = $f->user->url;
 $contentdata["news"]=$f->getnews();
 $contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
