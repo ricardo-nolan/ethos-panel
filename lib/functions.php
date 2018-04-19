@@ -175,10 +175,10 @@ class functions
 		}
 	}
 
-	public function getuserstats()
+	public function getuserstats($uid=0)
 	{
 		$tstats = array();
-		$this->getuser($_SESSION['uid']);
+		$this->getuser($uid>0?$uid:$_SESSION['uid']);
 		if(!empty($this->user->url))
 		{
 			$this->stats = $this->makerequest($this->user->url, "", 1);
@@ -237,19 +237,23 @@ class functions
 
 	public function checkrigs()
 	{
-		$this->getuserstats();
-		if(!empty($this->stats['rigs']))
+		$stmt = $this->getusers();
+		while($user = $stmt->fetchObject())
 		{
-			$data = array();
-			foreach($this->stats['rigs'] as $key => $value)
+			$this->getuserstats($user->id);
+			if(!empty($this->stats['rigs']))
 			{
-				$hashes = explode(" ", $value['miner_hashes']);
-				foreach($hashes as $hash){
-					$gpucrash = $hash <= $this->config->minimumhash?true:false;
+				$data = array();
+				foreach($this->stats['rigs'] as $key => $value)
+				{
+					$hashes = explode(" ", $value['miner_hashes']);
+					foreach($hashes as $hash){
+						$gpucrash = $hash <= $this->config->minimumhash?true:false;
+					}
 				}
-			}
-			if(date('m')%15 && $gpucrash==true && $this->user->emailnotifications==1){
-				mail($this->user->email,"[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
+				if(date('m')%15 && $gpucrash==true && $this->user->emailnotifications==1){
+					mail($this->user->email,"[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
+				}
 			}
 		}
 	}
