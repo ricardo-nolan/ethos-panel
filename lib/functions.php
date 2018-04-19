@@ -246,7 +246,7 @@ class functions
 					$gpucrash = $hash <= $this->config->minimumhash?true:false;
 				}
 			}
-			if($gpucrash==true && $this->user->emailnotifications==1){
+			if(date('m')%15 && $gpucrash==true && $this->user->emailnotifications==1){
 				mail($this->user->email,"[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
 			}
 		}
