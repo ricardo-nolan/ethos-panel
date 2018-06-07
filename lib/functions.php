@@ -65,10 +65,26 @@ class functions
 
 	public function getuser($uid)
 	{
-		$sql = "SELECT id,email,emailnotifications,url,usercode from users where id = :uid";
+		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url,usercode from users where id = :uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->bindParam(":uid", $uid);
+			$stmt->execute();
+
+			if($stmt->rowCount() > 0)
+			{
+				$user = $stmt->fetchObject();
+				$this->user = $user;
+			}
+		}
+	}
+	
+	public function getuserbytoken($token)
+	{
+		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url,usercode from users where datahash = :datahash";
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->bindParam(":datahash", $token);
 			$stmt->execute();
 
 			if($stmt->rowCount() > 0)
@@ -115,13 +131,16 @@ class functions
 			}
 			else
 			{
-				$sql = "INSERT INTO users (email,password) values(:email,:password)";
+				$sql = "INSERT INTO users (email,password,datahash) values(:email,:password,:datahash)";
 				if($stmt = $this->db->prepare($sql))
 				{
 					$hashedpassword = password_hash($password, PASSWORD_DEFAULT);
 
 					$stmt->bindParam(":email", $email);
 					$stmt->bindParam(":password", $hashedpassword);
+					$p = new OAuthProvider();
+					$token = bin2hex($p->generateToken(10));
+					$stmt->bindParam(":datahash", $token);
 					$stmt->execute();
 					$_SESSION['uid'] = $this->db->lastInsertId();
 				}
@@ -155,15 +174,16 @@ class functions
 		}
 	}
 
-	public function saveprofile($url,$emailnotifications)
+	public function saveprofile($dataorigin,$url,$emailnotifications)
 	{
-		$sql = "UPDATE users set url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
+		$sql = "UPDATE users set dataorigin=:dataorigin, url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$emailnotifications=$emailnotifications==1?1:0;
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
 			preg_match($regex, $url, $usercode);
 			$stmt->bindParam(":emailnotifications", $emailnotifications);
+			$stmt->bindParam(":dataorigin", $dataorigin);
 			$stmt->bindParam(":url", $url);
 			$stmt->bindParam(":usercode", $usercode[1]);
 			$stmt->bindParam(":uid", $_SESSION['uid']);
