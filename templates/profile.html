@@ -33,8 +33,25 @@
 								<input class="form-control" type="password" name="confirmpassword">
 							</div>
 							<div class="form-group">
+								<label>Data Origin</label>
+								<div class="radio">
+									<label>
+										<input type="radio" name="dataorigin" id="dataoriginethos" value="0" <!--%%dataoriginethos%%--> onclick="$('#directrig').hide();$('#ethosurl').show()">Ethosdistro.com
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" name="dataorigin" id="dataoriginrig" value="1" <!--%%dataoriginrig%%--> onclick="$('#directrig').show();$('#ethosurl').hide()">Direct from Rig
+									</label>
+								</div>
+							</div>
+							<div class="form-group" id="ethosurl" style="<!--%%dataoriginethosblock%%-->">
 								<label>URL</label>
 								<input class="form-control" name="url" placeholder="http://xxxxxx.ethosdistro.com/?json=yes" value="<!--%%url%%-->">
+							</div>
+							<div class="form-group" id="directrig" style="<!--%%dataoriginrigblock%%-->">
+								<label>Direct to Rig Script</label> (run the following command on each rig)<br />
+								<code>(crontab -l 2>/dev/null; echo '*/10 * * * * curl -X POST -H "Content-Type: multipart/form-data" -F "token=<!--%%datahash%%-->;" -F "data=@/var/run/ethos/stats.json;" https://ethos-panel.com/post.php') | crontab -</code>
 							</div>
 							<button type="submit" class="btn btn-primary">Save</button>
 						</fieldset>

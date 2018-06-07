@@ -27,9 +27,10 @@
 session_start();
 include('lib/functions.php');
 include('lib/calc.php');
-$f=new functions();
-$c=new calc();
-if(!isset($_SESSION['uid'])){
+$f = new functions();
+$c = new calc();
+if(!isset($_SESSION['uid']))
+{
 	header('location: /');
 }
 $f->getuserstats();
@@ -38,31 +39,45 @@ if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['pa
 {
 	$f->changepassword($_POST['password']);
 }
-if(!empty($_POST['url']))
+if(!empty($_POST['url']) || $_POST['dataorigin']=="1")
 {
-	if (filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE) {
-		$f->saveprofile($_POST['url'],$_POST['emailnotifications']);
+	if(!empty($_POST['url']) && filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE)
+	{
+		$emailnotifications=!empty($_POST['emailnotifications'])?$_POST['emailnotifications']:"";
+		$f->saveprofile($_POST['dataorigin'], $_POST['url'], $emailnotifications);
 		$f->getuser($_SESSION['uid']);
 	}
 }
 $contentdata["email"] = $f->user->email;
-$contentdata["emailnotifications"] = $f->user->emailnotifications==1?"checked":"";
+$contentdata["emailnotifications"] = $f->user->emailnotifications == 1 ? "checked" : "";
+$contentdata["dataoriginethos"] = $f->user->dataorigin == 0 ? "checked='true'" : "";
+$contentdata["dataoriginethosblock"] = $f->user->dataorigin == 0 ? "display:block" : "display:none";
+$contentdata["dataoriginrig"] = $f->user->dataorigin == 1 ? "checked='true'" : "";
+$contentdata["dataoriginrigblock"] = $f->user->dataorigin == 1 ? "display:block" : "display:none";
+$contentdata["datahash"] = $f->user->datahash;
 $contentdata["url"] = $f->user->url;
-$contentdata["news"]=$f->getnews();
-$contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
-$total_hash=0;
-foreach($f->stats['rigs'] as $key => $value)
+$contentdata["news"] = $f->getnews();
+$contentdata["rigs"] = "(" . $f->countrigs() . " rigs and counting!)";
+$total_hash = 0;
+if(!empty($f->stats['rigs']))
 {
-	$hashes = explode(" ", $value['miner_hashes']);
-	$total_hash+=array_sum($hashes);
+	foreach($f->stats['rigs'] as $key => $value)
+	{
+		$hashes = explode(" ", $value['miner_hashes']);
+		$total_hash += array_sum($hashes);
+	}
 }
-$price=$c->getprice("Ethereum");
-$profit=$c->geteth($total_hash);
-$contentdata['profiteth']=round($profit,4);
-$contentdata['profitbtc']=round($profit * $price[0]->price_btc,4);
-$contentdata['profitusd']=round($profit * $price[0]->price_usd,4);
-$contentdata['profiteur']=round($profit * $price[0]->price_eur,4);
-$contentdata['trackingcode']=$f->config->analytics;
-echo $f->getcontent('./templates/header.html',$contentdata);
-echo $f->getcontent('./templates/profile.html',$contentdata);
-echo $f->getcontent('./templates/footer.html',$contentdata);
+$price = $c->getprice("Ethereum");
+$profit = $c->geteth($total_hash);
+$contentdata['profiteth'] = round($profit, 4);
+$contentdata['profitbtc'] = round($profit * $price[0]->price_btc, 4);
+$contentdata['profitusd'] = round($profit * $price[0]->price_usd, 4);
+$contentdata['profiteur'] = round($profit * $price[0]->price_eur, 4);
+if(!empty($f->config->analytics))
+{
+	$contentdata['trackingcode'] = $f->config->analytics;
+}
+echo $f->getcontent('./templates/header.html', $contentdata);
+echo $f->getcontent('./templates/profile.html', $contentdata);
+echo $f->getcontent('./templates/footer.html', $contentdata);
+

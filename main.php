@@ -63,8 +63,9 @@ else{
 }
 
 
-
-$contentdata['trackingcode']=$f->config->analytics;
+if(!empty($f->config->analytics)){
+	$contentdata['trackingcode']=$f->config->analytics;
+}
 echo $f->getcontent('./templates/header.html',$contentdata);
 echo $f->getcontent('./templates/main.html',$contentdata);
 echo $f->getcontent('./templates/footer.html',$contentdata);
