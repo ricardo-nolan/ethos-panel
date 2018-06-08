@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 165.227.119.49 (MySQL 5.7.21-0ubuntu0.16.04.1)
+# Host: 127.0.0.1 (MySQL 5.6.38)
 # Database: ethos-panel
-# Generation Time: 2018-03-04 18:31:58 +0000
+# Generation Time: 2018-06-08 06:10:46 +0000
 # ************************************************************
 
 
@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS `hash`;
 CREATE TABLE `hash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
-  `date` datetime NOT NULL,
+  `date` varchar(20) NOT NULL,
   `rig` varchar(20) NOT NULL,
   `hash` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
@@ -59,10 +59,10 @@ DROP TABLE IF EXISTS `news`;
 
 CREATE TABLE `news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -90,9 +90,12 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(55) NOT NULL,
   `password` varchar(100) NOT NULL DEFAULT '',
+  `dataorigin` int(11) NOT NULL DEFAULT '0',
+  `datahash` varchar(50) DEFAULT NULL,
   `url` varchar(55) DEFAULT '',
   `usercode` varchar(6) DEFAULT NULL,
   `resethash` varchar(255) DEFAULT NULL,
+  `emailnotifications` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
