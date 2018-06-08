@@ -50,7 +50,7 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 					}, explode(" ", $value['fanrpm'])));
 			$data["data"][] = array(
 				$key . " / " . $value['rack_loc'],
-				"<a href='".$value['ip']."'>".$value['ip']."</a>",
+				"<a href='".$value['ip']."' target='_blank'>".$value['ip']."</a>",
 				$value['miner_instance'] . " / " . $value['gpus'],
 				$value['hash'],
 				$value['miner_hashes'],
