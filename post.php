@@ -61,4 +61,5 @@ if(!empty($f->user->id))
 
 
 	$f->db->exec($sql);
+	echo "Data Received.";
 }
