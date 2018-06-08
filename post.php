@@ -32,7 +32,7 @@ if(!empty($f->user->id))
 	$json = json_decode(file_get_contents($_FILES['data']['tmp_name']), 1);
 
 
-	$sql = "INSERT INTO hash (userid,date, rig, hash, miner_hashes, fanrpm, rack_loc, ip, miner_instance, gpus) "
+	$sql = "INSERT INTO hash (userid,date, rig, hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus) "
 			. "values("
 			. "'" . $f->user->id . "',"
 			. "'" . date('Y-m-d H:i:00') . "',"
