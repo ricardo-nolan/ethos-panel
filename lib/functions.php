@@ -138,8 +138,7 @@ class functions
 
 					$stmt->bindParam(":email", $email);
 					$stmt->bindParam(":password", $hashedpassword);
-					$p = new OAuthProvider();
-					$token = bin2hex($p->generateToken(10));
+					$token = bin2hex(openssl_random_pseudo_bytes(10));
 					$stmt->bindParam(":datahash", $token);
 					$stmt->execute();
 					$_SESSION['uid'] = $this->db->lastInsertId();
@@ -185,8 +184,7 @@ class functions
 			$stmt->bindParam(":emailnotifications", $emailnotifications);
 			$stmt->bindParam(":dataorigin", $dataorigin);
 			if(empty($this->user->datahash)){
-				$p = new OAuthProvider();
-				$token = bin2hex($p->generateToken(10));
+				$token = bin2hex(openssl_random_pseudo_bytes(10));
 				$stmt->bindParam(":datahash", $token);
 			}
 			else{
