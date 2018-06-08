@@ -214,7 +214,7 @@ class functions
 		}
 		else
 		{
-			$sql = "SELECT distinct rig,id, userid, date,  hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus from hash where userid = :uid and rig in (".getrigs(true).") order by date desc limit ".$this->countrigs(true);
+			$sql = "SELECT distinct rig,id, userid, date,  hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus from hash where userid = :uid and rig in (".$this->getrigs(true).") order by date desc limit ".$this->countrigs(true);
 			if($stmt = $this->db->prepare($sql))
 			{
 				$stmt->bindParam(":uid", $this->user->id);
