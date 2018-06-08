@@ -271,7 +271,7 @@ class functions
 
 	public function countrigs($user=false)
 	{
-		if($user==true){$append=" where uid='".$this->user->id."'";}else{$append="";}
+		if($user==true){$append=" where userid='".$this->user->id."'";}else{$append="";}
 		$sql = "SELECT count(distinct rig) as rigs from hash".$append;
 		if($stmt = $this->db->prepare($sql))
 		{
