@@ -49,7 +49,8 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 						return round($input / 1000);
 					}, explode(" ", $value['fanrpm'])));
 			$data["data"][] = array(
-				$key . " / " . $value['rack_loc'],
+				$key,
+				$value['rack_loc'],
 				"<a href='http://".$value['ip']."' target='_blank'>".$value['ip']."</a>",
 				$value['miner_instance'] . " / " . $value['gpus'],
 				$value['hash'],
