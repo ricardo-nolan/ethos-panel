@@ -214,7 +214,7 @@ class functions
 		}
 		else
 		{
-			$sql = "SELECT * from hash where userid = :uid order by date desc limit ".$this->countrigs();
+			$sql = "SELECT * from hash where userid = :uid order by date desc limit ".$this->countrigs(true);
 			if($stmt = $this->db->prepare($sql))
 			{
 				$stmt->bindParam(":uid", $this->user->id);
@@ -269,9 +269,10 @@ class functions
 		}
 	}
 
-	public function countrigs()
+	public function countrigs($user=false)
 	{
-		$sql = "SELECT count(distinct rig) as rigs from hash";
+		if($user==true){$append=" where uid='".$this->user->id."'";}else{$append="";}
+		$sql = "SELECT count(distinct rig) as rigs from hash".$append;
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
