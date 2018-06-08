@@ -214,7 +214,7 @@ class functions
 		}
 		else
 		{
-			$sql = "SELECT * from hash where userid = :uid order by date desc limit 1";
+			$sql = "SELECT * from hash where userid = :uid order by date desc limit ".$this->countrigs();
 			if($stmt = $this->db->prepare($sql))
 			{
 				$stmt->bindParam(":uid", $this->user->id);
