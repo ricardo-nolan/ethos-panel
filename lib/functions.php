@@ -98,7 +98,7 @@ class functions
 
 	public function getusers()
 	{
-		$sql = "SELECT id,email,emailnotifications,url from users";
+		$sql = "SELECT id,email,emailnotifications,dataorigin,url from users";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->execute();
@@ -218,7 +218,7 @@ class functions
 		$stmt = $this->getusers();
 		while($user = $stmt->fetchObject())
 		{
-			if(!empty($user->url))
+			if(!empty($user->url) && $user->dataorigin=="0")
 			{
 				$this->stats = $this->makerequest($user->url, "", 1);
 				if(isset($this->stats['rigs']) && !empty($this->stats['rigs']))
