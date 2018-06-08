@@ -43,6 +43,7 @@ class functions
 		try
 		{
 			$this->db = new PDO("mysql:host={$this->config->db_servername};dbname={$this->config->db_name}", $this->config->db_username, $this->config->db_password);
+			$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 		catch(PDOException $e)
 		{
@@ -78,7 +79,7 @@ class functions
 			}
 		}
 	}
-
+	
 	public function getuserbytoken($token)
 	{
 		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url,usercode from users where datahash = :datahash";
@@ -173,30 +174,27 @@ class functions
 		}
 	}
 
-	public function saveprofile($dataorigin, $url, $emailnotifications)
+	public function saveprofile($dataorigin,$url,$emailnotifications)
 	{
 		$sql = "UPDATE users set dataorigin=:dataorigin, datahash=:datahash, url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$emailnotifications = $emailnotifications == 1 ? 1 : 0;
+			$emailnotifications=$emailnotifications==1?1:0;
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
 			preg_match($regex, $url, $usercode);
 			$stmt->bindParam(":emailnotifications", $emailnotifications);
 			$stmt->bindParam(":dataorigin", $dataorigin);
-			if(empty($this->user->datahash))
-			{
+			if(empty($this->user->datahash)){
 				$token = bin2hex(openssl_random_pseudo_bytes(10));
 				$stmt->bindParam(":datahash", $token);
 			}
-			else
-			{
+			else{
 				$stmt->bindParam(":datahash", $this->user->datahash);
 			}
 			$stmt->bindParam(":url", $url);
 			$stmt->bindParam(":usercode", $usercode[1]);
 			$stmt->bindParam(":uid", $_SESSION['uid']);
 			$stmt->execute();
-			echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(), 1);
 		}
 		else
 		{
@@ -204,10 +202,10 @@ class functions
 		}
 	}
 
-	public function getuserstats($uid = 0)
+	public function getuserstats($uid=0)
 	{
 		$tstats = array();
-		$this->getuser($uid > 0 ? $uid : $_SESSION['uid']);
+		$this->getuser($uid>0?$uid:$_SESSION['uid']);
 		if(!empty($this->user->url))
 		{
 			$this->stats = $this->makerequest($this->user->url, "", 1);
@@ -276,14 +274,12 @@ class functions
 				foreach($this->stats['rigs'] as $key => $value)
 				{
 					$hashes = explode(" ", $value['miner_hashes']);
-					foreach($hashes as $hash)
-					{
-						$gpucrash = $hash <= $this->config->minimumhash ? true : false;
+					foreach($hashes as $hash){
+						$gpucrash = $hash <= $this->config->minimumhash?true:false;
 					}
 				}
-				if(date('m') % 15 && $gpucrash == true && $this->user->emailnotifications == 1)
-				{
-					mail($this->user->email, "[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
+				if(date('m')%15 && $gpucrash==true && $this->user->emailnotifications==1){
+					mail($this->user->email,"[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
 				}
 			}
 		}
