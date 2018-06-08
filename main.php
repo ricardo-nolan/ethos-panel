@@ -34,7 +34,6 @@ if(!isset($_SESSION['uid'])){
 $f->getuser($_SESSION['uid']);
 $f->getuserstats();
 $table="";
-
 if(!empty($f->stats['rigs']))
 {
 	$contentdata["keys"]="'".implode("','",array_keys($f->stats['rigs']))."'";

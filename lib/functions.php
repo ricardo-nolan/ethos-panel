@@ -79,7 +79,7 @@ class functions
 			}
 		}
 	}
-	
+
 	public function getuserbytoken($token)
 	{
 		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url,usercode from users where datahash = :datahash";
@@ -174,21 +174,23 @@ class functions
 		}
 	}
 
-	public function saveprofile($dataorigin,$url,$emailnotifications)
+	public function saveprofile($dataorigin, $url, $emailnotifications)
 	{
 		$sql = "UPDATE users set dataorigin=:dataorigin, datahash=:datahash, url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$emailnotifications=$emailnotifications==1?1:0;
+			$emailnotifications = $emailnotifications == 1 ? 1 : 0;
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
 			preg_match($regex, $url, $usercode);
 			$stmt->bindParam(":emailnotifications", $emailnotifications);
 			$stmt->bindParam(":dataorigin", $dataorigin);
-			if(empty($this->user->datahash)){
+			if(empty($this->user->datahash))
+			{
 				$token = bin2hex(openssl_random_pseudo_bytes(10));
 				$stmt->bindParam(":datahash", $token);
 			}
-			else{
+			else
+			{
 				$stmt->bindParam(":datahash", $this->user->datahash);
 			}
 			$stmt->bindParam(":url", $url);
@@ -202,13 +204,30 @@ class functions
 		}
 	}
 
-	public function getuserstats($uid=0)
+	public function getuserstats($uid = 0)
 	{
 		$tstats = array();
-		$this->getuser($uid>0?$uid:$_SESSION['uid']);
-		if(!empty($this->user->url))
+		$this->getuser($uid > 0 ? $uid : $_SESSION['uid']);
+		if(!empty($this->user->url) && $this->user->dataorigin == "0")
 		{
 			$this->stats = $this->makerequest($this->user->url, "", 1);
+		}
+		else
+		{
+			$sql = "SELECT * from hash where userid = :uid order by date desc limit 1";
+			if($stmt = $this->db->prepare($sql))
+			{
+				$stmt->bindParam(":uid", $this->user->id);
+				$stmt->execute();
+
+				if($stmt->rowCount() > 0)
+				{
+					while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+					{
+						$this->stats['rigs'][$row['rig']]=$row;
+					}
+				}
+			}
 		}
 	}
 
@@ -218,7 +237,7 @@ class functions
 		$stmt = $this->getusers();
 		while($user = $stmt->fetchObject())
 		{
-			if(!empty($user->url) && $user->dataorigin=="0")
+			if(!empty($user->url) && $user->dataorigin == "0")
 			{
 				$this->stats = $this->makerequest($user->url, "", 1);
 				if(isset($this->stats['rigs']) && !empty($this->stats['rigs']))
@@ -274,12 +293,14 @@ class functions
 				foreach($this->stats['rigs'] as $key => $value)
 				{
 					$hashes = explode(" ", $value['miner_hashes']);
-					foreach($hashes as $hash){
-						$gpucrash = $hash <= $this->config->minimumhash?true:false;
+					foreach($hashes as $hash)
+					{
+						$gpucrash = $hash <= $this->config->minimumhash ? true : false;
 					}
 				}
-				if(date('m')%15 && $gpucrash==true && $this->user->emailnotifications==1){
-					mail($this->user->email,"[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
+				if(date('m') % 15 && $gpucrash == true && $this->user->emailnotifications == 1)
+				{
+					mail($this->user->email, "[Ethos-Panel] GPU Crash", "Ethos-Panel has detected that one of your GPUs has crashed");
 				}
 			}
 		}

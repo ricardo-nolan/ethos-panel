@@ -32,16 +32,31 @@ if(!empty($f->user->id))
 	$json = json_decode(file_get_contents($_FILES['data']['tmp_name']), 1);
 
 
-	$sql = "INSERT INTO hash (userid,date, rig, hash) "
+	$sql = "INSERT INTO hash (userid,date, rig, hash, miner_hashes, fanrpm, rack_loc, ip, miner_instance, gpus) "
 			. "values("
 			. "'" . $f->user->id . "',"
 			. "'" . date('Y-m-d H:i:00') . "',"
-			. "'" . $json['hostname'] . "','" . $json['hash'] . "') "
+			. "'" . $json['hostname'] . "',"
+			. "'" . $json['hash'] . "',"
+			. "'" . $json['miner_hashes'] . "',"
+			. "'" . $json['fanrpm'] . "',"
+			. "'" . $json['rack_loc'] . "',"
+			. "'" . $json['ip'] . "',"
+			. "'" . $json['gpus'] . "',"
+			. "'" . $json['gpus'] . "'"
+			. ") "
 			. "ON DUPLICATE KEY UPDATE "
 			. "userid='" . $f->user->id . "', "
 			. "date='" . date('Y-m-d H:i:00') . "', "
 			. "rig='" . $json['hostname'] . "', "
-			. "hash='" . $json['hash'] . "'";
+			. "hash='" . $json['hash'] . "', "
+			. "miner_hashes='" . $json['miner_hashes'] . "', "
+			. "fanrpm='" . $json['fanrpm'] . "', "
+			. "rack_loc='" . $json['rack_loc'] . "', "
+			. "ip='" . $json['ip'] . "', "
+			. "miner_instance='" . $json['gpus'] . "', "
+			. "gpus='" . $json['gpus'] . "' ";
+			
 
 
 
