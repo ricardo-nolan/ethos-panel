@@ -176,7 +176,7 @@ class functions
 
 	public function saveprofile($dataorigin,$url,$emailnotifications)
 	{
-		$sql = "UPDATE users set dataorigin=:dataorigin, url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
+		$sql = "UPDATE users set dataorigin=:dataorigin, datahash=:datahash, url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$emailnotifications=$emailnotifications==1?1:0;
@@ -184,6 +184,14 @@ class functions
 			preg_match($regex, $url, $usercode);
 			$stmt->bindParam(":emailnotifications", $emailnotifications);
 			$stmt->bindParam(":dataorigin", $dataorigin);
+			if(empty($this->user->datahash)){
+				$p = new OAuthProvider();
+				$token = bin2hex($p->generateToken(10));
+				$stmt->bindParam(":datahash", $token);
+			}
+			else{
+				$stmt->bindParam(":datahash", $this->user->datahash);
+			}
 			$stmt->bindParam(":url", $url);
 			$stmt->bindParam(":usercode", $usercode[1]);
 			$stmt->bindParam(":uid", $_SESSION['uid']);

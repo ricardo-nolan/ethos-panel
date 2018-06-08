@@ -39,7 +39,7 @@ if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['pa
 {
 	$f->changepassword($_POST['password']);
 }
-if(!empty($_POST['url']) || $_POST['dataorigin']=="1")
+if(!empty($_POST['url']) || (!empty($_POST['dataorigin']) && $_POST['dataorigin']=="1"))
 {
 	if(!empty($_POST['url']) && filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE)
 	{
@@ -54,7 +54,7 @@ $contentdata["dataoriginethos"] = $f->user->dataorigin == 0 ? "checked='true'" :
 $contentdata["dataoriginethosblock"] = $f->user->dataorigin == 0 ? "display:block" : "display:none";
 $contentdata["dataoriginrig"] = $f->user->dataorigin == 1 ? "checked='true'" : "";
 $contentdata["dataoriginrigblock"] = $f->user->dataorigin == 1 ? "display:block" : "display:none";
-$contentdata["datahash"] = $f->user->datahash;
+$contentdata["dataoriginrigtext"] = !empty($f->user->datahash) ? "<label>Direct to Rig Script</label>  (run the following command on each rig)<br /><code>(crontab -l 2>/dev/null; echo '*/10 * * * * curl -X POST -H \"Content-Type: multipart/form-data\" -F \"token=".$f->user->datahash.";\" -F \"data=@/var/run/ethos/stats.json;\" https://ethos-panel.com/post.php') | crontab -</code>" : "";
 $contentdata["url"] = $f->user->url;
 $contentdata["news"] = $f->getnews();
 $contentdata["rigs"] = "(" . $f->countrigs() . " rigs and counting!)";
