@@ -214,7 +214,7 @@ class functions
 		}
 		else
 		{
-			$sql = "SELECT * from hash where userid = :uid order by date desc limit ".$this->countrigs(true);
+			$sql = "SELECT distinct rig,id, userid, date,  hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus from hash where userid = :uid and rig in (".getrigs(true).") order by date desc limit ".$this->countrigs(true);
 			if($stmt = $this->db->prepare($sql))
 			{
 				$stmt->bindParam(":uid", $this->user->id);
@@ -266,6 +266,22 @@ class functions
 		if($this->db->exec($sql) !== TRUE)
 		{
 			echo "Error: " . $sql . "<br>" . print_r($this->db->errorInfo(), 1);
+		}
+	}
+	
+	public function getrigs($user=false)
+	{
+		if($user==true){$append=" where userid='".$this->user->id."'";}else{$append="";}
+		$sql = "SELECT distinct rig from hash".$append;
+		if($stmt = $this->db->prepare($sql))
+		{
+			$stmt->execute();
+
+			while($row = $stmt->fetchObject())
+			{
+				$rigs[]=$row->rig;
+			}
+			return "'" . implode("','", $rigs) . "'";
 		}
 	}
 
