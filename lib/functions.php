@@ -214,37 +214,20 @@ class functions
 		}
 		else
 		{
-			$rigs = $this->getrigs(true);
-			
-				$sql = "SELECT distinct rig,id, userid, date,  hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus from hash where userid = :uid order by date desc limit ".$this->countrigs(true);
-				if($stmt = $this->db->prepare($sql))
-				{
-					$stmt->bindParam(":uid", $this->user->id);
-					$stmt->execute();
+			$sql = "SELECT distinct rig,id, userid, date,  hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus from hash where userid = :uid and rig in (".$this->getrigs(true).") order by date desc limit ".$this->countrigs(true);
+			if($stmt = $this->db->prepare($sql))
+			{
+				$stmt->bindParam(":uid", $this->user->id);
+				$stmt->execute();
 
-					if($stmt->rowCount() > 0)
+				if($stmt->rowCount() > 0)
+				{
+					while($row = $stmt->fetch(PDO::FETCH_ASSOC))
 					{
-						$counter=0;
-						$date="";
-						while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-						{
-							foreach ($rigs as $rig){
-								if($row->rig==$rig){
-									$this->stats['rigs'][$row['rig']]=$row;
-									$date=$row->date;
-									$counter++;
-								}
-								else{
-									if($counter>0){
-										$this->stats['rigs'][$rig]['date']=$date;
-										$this->stats['rigs'][$rig]['hash']=0;			
-									}
-								}
-							}
-						}
+						$this->stats['rigs'][$row['rig']]=$row;
 					}
 				}
-			
+			}
 		}
 	}
 
@@ -298,7 +281,7 @@ class functions
 			{
 				$rigs[]=$row->rig;
 			}
-			return $rigs;
+			return "'" . implode("','", $rigs) . "'";
 		}
 	}
 
