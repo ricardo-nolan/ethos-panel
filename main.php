@@ -36,7 +36,7 @@ $f->getuserstats();
 $table="";
 if(!empty($f->stats['rigs']))
 {
-	$contentdata["keys"]="'".implode("','",array_keys($f->stats['rigs']))."'";
+	$contentdata["keys"]=$f->getrigs(true);
 	$total_hash=0;
 	foreach($f->stats['rigs'] as $key => $value)
 	{
