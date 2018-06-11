@@ -31,7 +31,14 @@ if(!empty($f->user->id))
 {
 	$json = json_decode(file_get_contents($_FILES['data']['tmp_name']), 1);
 
-
+	$hashes = explode(" ",$json['miner_hashes']);
+	$mining_instance=$json['gpus'];
+	foreach($hashes as $hash){
+		if($hash==0)
+		{
+			$mining_instance--;
+		}
+	}
 	$sql = "INSERT INTO hash (userid,date, rig, hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus) "
 			. "values("
 			. "'" . $f->user->id . "',"
