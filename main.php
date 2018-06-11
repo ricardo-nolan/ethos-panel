@@ -54,7 +54,7 @@ if(!empty($f->stats['rigs']))
 $contentdata["data"]=$f->getchart();
 $contentdata["news"]=$f->getnews();
 $contentdata["rigs"]="(".$f->countrigs()." rigs and counting!)";
-if(empty($f->user->url)){
+if(empty($f->user->url) && $f->user->dataorigin==0){
 	$contentdata["urlwarning"]="<h4>Please provide your ethos url in your <a href='./profile.php'>profile</a></h4>";
 }
 else{
