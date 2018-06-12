@@ -36,10 +36,11 @@ class functions
 
 	public function __construct()
 	{
-		ini_set("SMTP", "smtp.dynu.com");
-		ini_set("sendmail_from", "info@ethos-panel.com");
+		
 		$this->home_dir = getcwd();
 		$this->getconfig();
+		ini_set("SMTP", $this->config->smtp);
+		ini_set("sendmail_from", $this->config->sendmail_from);
 		try
 		{
 			$this->db = new PDO("mysql:host={$this->config->db_servername};dbname={$this->config->db_name}", $this->config->db_username, $this->config->db_password);
