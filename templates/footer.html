@@ -63,6 +63,7 @@
 				});
 				dtable.ajax.reload();
 				$.get("data.php?getrigcount=true", function (data) {$('#rigcounter').html(data);});
+				$.get("data.php?gethashrate=true", function (data) {$('#hashrate').html(data);});
 				$.get("data.php?getprofit=true&currency=eth", function (data) {$('#profiteth').html(data);});
 				$.get("data.php?getprofit=true&currency=btc", function (data) {$('#profitbtc').html(data);});
 				$.get("data.php?getprofit=true&currency=usd", function (data) {$('#profitusd').html(data);});

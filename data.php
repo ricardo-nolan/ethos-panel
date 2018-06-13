@@ -67,6 +67,20 @@ if(isset($_GET['getrigcount']) && $_GET['getrigcount'] == "true")
 	echo "(" . $f->countrigs() . " rigs and counting!)";
 }
 
+if(isset($_GET['gethashrate']) && $_GET['gethashrate'] == "true")
+{
+	$f->getuserstats();
+	if(!empty($f->stats['rigs']))
+	{
+		$total_hash = 0;
+		foreach($f->stats['rigs'] as $key => $value)
+		{
+			$total_hash+=$value['hash'];
+		}
+	}
+	echo $total_hash;
+}
+
 if(isset($_GET['getprofit']) && $_GET['getprofit'] == "true")
 {
 	$f->getuserstats();
