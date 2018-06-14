@@ -39,7 +39,7 @@ if(!empty($f->user->id))
 			$mining_instance--;
 		}
 	}
-	$sql = "INSERT INTO hash (userid,date, rig, hash, miner_hashes, temp, fanrpm, rack_loc, ip, miner_instance, gpus) "
+	$sql = "INSERT INTO hash (userid,date, rig, hash, miner_hashes, temp, fanrpm, rack_loc, ip, uptime, gpus) "
 			. "values("
 			. "'" . $f->user->id . "',"
 			. "'" . date('Y-m-d H:i:00') . "',"
@@ -50,7 +50,7 @@ if(!empty($f->user->id))
 			. "'" . $json['fanrpm'] . "',"
 			. "'" . $json['rack_loc'] . "',"
 			. "'" . $json['ip'] . "',"
-			. "'" . $json['gpus'] . "',"
+			. "'" . $json['uptime'] . "',"
 			. "'" . $json['gpus'] . "'"
 			. ") "
 			. "ON DUPLICATE KEY UPDATE "
@@ -63,7 +63,7 @@ if(!empty($f->user->id))
 			. "fanrpm='" . $json['fanrpm'] . "', "
 			. "rack_loc='" . $json['rack_loc'] . "', "
 			. "ip='" . $json['ip'] . "', "
-			. "miner_instance='" . $json['gpus'] . "', "
+			. "uptime='" . $json['uptime'] . "', "
 			. "gpus='" . $json['gpus'] . "' ";
 			
 

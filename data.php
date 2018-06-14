@@ -51,6 +51,7 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 			$data["data"][] = array(
 				$key,
 				$value['rack_loc'],
+				$value['uptime'],
 				"<a href='http://".$value['ip']."' target='_blank'>".$value['ip']."</a>",
 				$value['miner_instance'] . " / " . $value['gpus'],
 				$value['hash'],
