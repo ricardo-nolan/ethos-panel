@@ -2,7 +2,7 @@ Options -Indexes
 RewriteEngine On
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteRule ^remote/(.*)$ ./remoteconf.php?usercode=$1
+RewriteRule ^remote/(.*)$ ./remoteconf.php?datahash=$1
 
 <Files "config.json">
         Order Deny,Allow

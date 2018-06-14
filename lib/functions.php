@@ -67,7 +67,7 @@ class functions
 
 	public function getuser($uid)
 	{
-		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url,usercode from users where id = :uid";
+		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url from users where id = :uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->bindParam(":uid", $uid);
@@ -83,7 +83,7 @@ class functions
 
 	public function getuserbytoken($token)
 	{
-		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url,usercode from users where datahash = :datahash";
+		$sql = "SELECT id,email,emailnotifications,dataorigin,datahash,url from users where datahash = :datahash";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$stmt->bindParam(":datahash", $token);
@@ -177,12 +177,12 @@ class functions
 
 	public function saveprofile($dataorigin, $url, $emailnotifications)
 	{
-		$sql = "UPDATE users set dataorigin=:dataorigin, datahash=:datahash, url=:url, emailnotifications=:emailnotifications, usercode=:usercode where id=:uid";
+		$sql = "UPDATE users set dataorigin=:dataorigin, datahash=:datahash, url=:url, emailnotifications=:emailnotifications, datahash=:datahash where id=:uid";
 		if($stmt = $this->db->prepare($sql))
 		{
 			$emailnotifications = $emailnotifications == 1 ? 1 : 0;
 			$regex = '/http:\/\/([a-z0-9]{6}).*/';
-			preg_match($regex, $url, $usercode);
+			preg_match($regex, $url, $datahash);
 			$stmt->bindParam(":emailnotifications", $emailnotifications);
 			$stmt->bindParam(":dataorigin", $dataorigin);
 			if(empty($this->user->datahash))
@@ -195,7 +195,6 @@ class functions
 				$stmt->bindParam(":datahash", $this->user->datahash);
 			}
 			$stmt->bindParam(":url", $url);
-			$stmt->bindParam(":usercode", $usercode[1]);
 			$stmt->bindParam(":uid", $_SESSION['uid']);
 			$stmt->execute();
 		}
@@ -392,12 +391,12 @@ class functions
 		}
 	}
 
-	public function getremoteconf($usercode)
+	public function getremoteconf($datahash)
 	{
-		$sql = "SELECT conf from remoteconf join users on remoteconf.userid=users.id where users.usercode=:usercode";
+		$sql = "SELECT conf from remoteconf join users on remoteconf.userid=users.id where users.datahash=:datahash";
 		if($stmt = $this->db->prepare($sql))
 		{
-			$stmt->bindParam(":usercode", $usercode);
+			$stmt->bindParam(":datahash", $datahash);
 			$stmt->execute();
 
 			if($stmt->rowCount() == 1)

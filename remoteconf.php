@@ -30,9 +30,9 @@ include('lib/calc.php');
 $f = new functions();
 $c = new calc();
 
-if(isset($_GET['usercode']))
+if(isset($_GET['datahash']))
 {
-	echo $f->getremoteconf($_GET['usercode']);
+	echo $f->getremoteconf($_GET['datahash']);
 }
 else
 {
@@ -47,20 +47,15 @@ else
 		$f->saveremoteconf($_POST['remoteconf']);
 	}
 
-	if(empty($f->user->usercode))
+
+
+	$contentdata['value'] = $f->getremoteconf($f->user->datahash);
+	if(empty($contentdata['value']))
 	{
-		$contentdata['remoteurl'] = "Please configure your url in the profile section";
 		$contentdata['value'] = file_get_contents('./sampleconf');
 	}
-	else
-	{
-		$contentdata['value'] = $f->getremoteconf($f->user->usercode);
-		if(empty($contentdata['value']))
-		{
-			$contentdata['value'] = file_get_contents('./sampleconf');
-		}
-		$contentdata['remoteurl'] = "<a href='http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->usercode . "' target='_blank'>http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->usercode . "</a>";
-	}
+	$contentdata['remoteurl'] = "<a href='http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->datahash . "' target='_blank'>http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->datahash . "</a>";
+
 	$contentdata["news"] = $f->getnews();
 	$contentdata["rigs"] = "(" . $f->countrigs() . " rigs and counting!)";
 	$total_hash = 0;
@@ -71,14 +66,17 @@ else
 	}
 	$price = $c->getprice("Ethereum");
 	$profit = $c->geteth($total_hash);
-	$contentdata['profiteth']=round($profit,4);
-	$contentdata['profitbtc']=round($profit * $price[0]->price_btc,4);
-	$contentdata['profitusd']=round($profit * $price[0]->price_usd,4);
-	$contentdata['profiteur']=round($profit * $price[0]->price_eur,4);
-	$contentdata['trackingcode']=$f->config->analytics;
-	echo $f->getcontent('./templates/header.html',$contentdata);
-	echo $f->getcontent('./templates/remoteconf.html',$contentdata);
-	echo $f->getcontent('./templates/footer.html',$contentdata);
+	$contentdata['profiteth'] = round($profit, 4);
+	$contentdata['profitbtc'] = round($profit * $price[0]->price_btc, 4);
+	$contentdata['profitusd'] = round($profit * $price[0]->price_usd, 4);
+	$contentdata['profiteur'] = round($profit * $price[0]->price_eur, 4);
+	if(!empty($f->config->analytics))
+	{
+		$contentdata['trackingcode'] = $f->config->analytics;
+	}
+	echo $f->getcontent('./templates/header.html', $contentdata);
+	echo $f->getcontent('./templates/remoteconf.html', $contentdata);
+	echo $f->getcontent('./templates/footer.html', $contentdata);
 }
 
 
