@@ -48,10 +48,14 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 					{
 						return round($input / 1000);
 					}, explode(" ", $value['fanrpm'])));
+			$hours = floor($value['uptime'] / 3600);
+			$mins = floor($value['uptime'] / 60 % 60);
+			$secs = floor($value['uptime'] % 60);
+			$uptime = sprintf('%02d:%02d:%02d', $hours, $mins, $secs);
 			$data["data"][] = array(
 				$key,
 				$value['rack_loc'],
-				$value['uptime'],
+				$uptime,
 				"<a href='http://".$value['ip']."' target='_blank'>".$value['ip']."</a>",
 				$value['miner_instance'] . " / " . $value['gpus'],
 				$value['hash'],
