@@ -52,7 +52,7 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 			$hours = floor($value['uptime'] % 86400 / 3600);
 			$mins = floor($value['uptime'] / 60 % 60);
 			$secs = floor($value['uptime'] % 60);
-			$uptime = sprintf('%02D %02d:%02d:%02d', $days, $hours, $mins, $secs);
+			$uptime = sprintf('%02d D %02d:%02d:%02d', $days, $hours, $mins, $secs);
 			$data["data"][] = array(
 				$key,
 				$value['rack_loc'],
