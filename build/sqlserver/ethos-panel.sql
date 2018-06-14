@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.6.38)
+# Host: 165.227.119.49 (MySQL 5.7.22-0ubuntu0.16.04.1)
 # Database: ethos-panel
-# Generation Time: 2018-06-14 05:53:18 +0000
+# Generation Time: 2018-06-14 06:12:07 +0000
 # ************************************************************
 
 
@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS `hash`;
 CREATE TABLE `hash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
-  `date` varchar(20) NOT NULL,
+  `date` datetime NOT NULL,
   `rig` varchar(20) NOT NULL,
   `hash` decimal(10,2) NOT NULL,
   `miner_hashes` varchar(100) DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `hash` (
   `fanrpm` varchar(100) DEFAULT NULL,
   `rack_loc` varchar(50) DEFAULT NULL,
   `ip` varchar(50) DEFAULT NULL,
-  `miner_instance` varchar(50) DEFAULT NULL,
+  `uptime` int(11) DEFAULT NULL,
   `gpus` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `main` (`userid`,`date`,`rig`) USING BTREE
@@ -66,10 +66,10 @@ DROP TABLE IF EXISTS `news`;
 
 CREATE TABLE `news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date` datetime DEFAULT CURRENT_TIMESTAMP,
   `content` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 
@@ -97,7 +97,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(55) NOT NULL,
   `password` varchar(100) NOT NULL DEFAULT '',
-  `dataorigin` int(11) NOT NULL DEFAULT '0',
+  `dataorigin` tinyint(4) NOT NULL DEFAULT '0',
   `datahash` varchar(50) DEFAULT NULL,
   `url` varchar(55) DEFAULT '',
   `resethash` varchar(255) DEFAULT NULL,
