@@ -40,9 +40,9 @@ if(!empty($_POST['password']) && !empty($_POST['confirmpassword']) && $_POST['pa
 	$f->changepassword($_POST['password']);
 }
 
+$emailnotifications=!empty($_POST['emailnotifications'])?$_POST['emailnotifications']:"";
 if(!empty($_POST['url']) && (!empty($_POST['dataorigin']) && $_POST['dataorigin']=="0") && filter_var($_POST['url'], FILTER_VALIDATE_URL) !== FALSE)
 {
-	$emailnotifications=!empty($_POST['emailnotifications'])?$_POST['emailnotifications']:"";
 	$f->saveprofile($_POST['dataorigin'], $_POST['url'], $emailnotifications);
 	$f->getuser($_SESSION['uid']);
 }
