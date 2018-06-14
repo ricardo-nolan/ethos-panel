@@ -54,7 +54,7 @@ else
 	{
 		$contentdata['value'] = file_get_contents('./sampleconf');
 	}
-	$contentdata['remoteurl'] = "<a href='http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->datahash . "' target='_blank'>http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->datahash . "</a>";
+	$contentdata['remoteurl'] = "<a href='https://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->datahash . "' target='_blank'>http://" . $_SERVER['SERVER_NAME'] . "/remote/" . $f->user->datahash . "</a>";
 
 	$contentdata["news"] = $f->getnews();
 	$contentdata["rigs"] = "(" . $f->countrigs() . " rigs and counting!)";
