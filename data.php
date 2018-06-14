@@ -53,12 +53,20 @@ if(isset($_GET['gettable']) && $_GET['gettable'] == "true")
 			$mins = floor($value['uptime'] / 60 % 60);
 			$secs = floor($value['uptime'] % 60);
 			$uptime = sprintf('%02d Days + %02d:%02d:%02d', $days, $hours, $mins, $secs);
+			$hashes = explode(" ",$value['miner_hashes']);
+			$mining_instance=$value['gpus'];
+			foreach($hashes as $hash){
+				if($hash==0)
+				{
+					$mining_instance--;
+				}
+			}
 			$data["data"][] = array(
 				$key,
 				$value['rack_loc'],
 				$uptime,
 				"<a href='http://".$value['ip']."' target='_blank'>".$value['ip']."</a>",
-				$value['miner_instance'] . " / " . $value['gpus'],
+				$mining_instance . " / " . $value['gpus'],
 				$value['hash'],
 				$value['miner_hashes'],
 				$value['temp'],
