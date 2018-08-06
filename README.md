@@ -49,7 +49,10 @@ then point your browser to: `http://yourserver/install/install.php` and fill in 
 
 For profitability calculators, please obtain an API key at https://www.coinwarz.com/v1/api/documentation and provide it in config.json
 
-# WORK IN PROGRESS
+## Please be aware, this is a project done on my free time (which I don't have a lot of). Due to the summer, and lack of adequate cooling facilities, I'm not mining myself at the moment, so I only carry out reported fixes, when time allows.
+## Please do not expect active development until winter.
+
+## Promises of donations for work do not constitute any obligations from my side. I've been promised donations for work multiple times, and as you can see from the donation addresses, I've received a total of one donation in all the time this has been in development. So please do not expect me to stop what I'm doing to accomodate your request. I'll get to it when I have time.
 
 
 ## Donations
